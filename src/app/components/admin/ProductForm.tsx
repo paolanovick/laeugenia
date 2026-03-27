@@ -191,7 +191,7 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
                 type="url"
                 value={url}
                 onChange={(e) => handleImageChange(i, e.target.value)}
-                placeholder="https://ejemplo.com/imagen.jpg"
+                placeholder="https://i.ibb.co/... (recomendado: imgbb.com)"
                 className="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-white text-gray-800 text-sm focus:outline-none focus:border-[#C4351A]"
               />
               {url && (
