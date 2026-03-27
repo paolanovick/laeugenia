@@ -2,6 +2,8 @@ import { Outlet } from 'react-router';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CookieBanner } from './components/CookieBanner';
+import { AnnouncementTicker } from './components/AnnouncementTicker';
+import { PromoModal } from './components/PromoModal';
 import { Toaster } from './components/ui/sonner';
 import { HeroSection } from './components/HeroSection';
 import { useEntry } from './contexts/EntryContext';
@@ -27,6 +29,7 @@ export const Layout = () => {
 
   return (
     <div className="min-h-screen">
+      <AnnouncementTicker />
       <Navbar />
       <main>
         <Outlet />
@@ -34,6 +37,7 @@ export const Layout = () => {
       <Footer />
       <Toaster position="bottom-right" />
       <CookieBanner />
+      <PromoModal />
     </div>
   );
 };

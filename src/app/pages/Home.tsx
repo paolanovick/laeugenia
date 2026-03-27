@@ -15,15 +15,15 @@ export const Home = () => {
         <section id="productos" className="mb-20 pt-12">
           <div className="max-w-7xl mx-auto px-4 mb-8">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="flex items-center gap-4"
+              className="text-center"
             >
-              <div className="h-1 w-12 bg-gradient-to-r from-[#F5C080] to-transparent rounded-full" />
-              <h2 className="text-3xl md:text-4xl font-bold text-white">
+              <h2 className="text-4xl md:text-5xl font-bold text-white tracking-wide uppercase">
                 ⭐ Productos Destacados
               </h2>
+              <div className="h-1 w-24 bg-gradient-to-r from-transparent via-[#F5C080] to-transparent rounded-full mx-auto mt-3" />
             </motion.div>
           </div>
           <InfiniteCarousel products={featuredProducts} />

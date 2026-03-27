@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Menu, X, LogOut, Package } from 'lucide-react';
+import { Menu, X, LogOut, Package, LayoutDashboard } from 'lucide-react';
 import { Product } from '../data/products';
 import { useProducts } from '../contexts/ProductsContext';
 import { ProductForm } from '../components/admin/ProductForm';
 import { ProductList } from '../components/admin/ProductList';
+import { PageEditor } from '../components/admin/PageEditor';
 import { adminLogout, isAdminAuthenticated } from './AdminLogin';
 
-type Seccion = 'productos';
+type Seccion = 'productos' | 'pagina';
 
 export const AdminPanel = () => {
   const navigate = useNavigate();
@@ -57,6 +58,7 @@ export const AdminPanel = () => {
 
   const navItems: { id: Seccion; label: string; icon: React.ReactNode }[] = [
     { id: 'productos', label: 'Productos', icon: <Package className="w-5 h-5" /> },
+    { id: 'pagina', label: 'Edición de Página', icon: <LayoutDashboard className="w-5 h-5" /> },
   ];
 
   return (
@@ -162,12 +164,8 @@ export const AdminPanel = () => {
       <main className="flex-1 p-6 md:p-8 mt-14 md:mt-0 overflow-auto">
         {seccion === 'productos' && (
           <div>
-            <h1 className="text-3xl font-bold text-[#7B1F0F] mb-6">
-              Gestión de Productos
-            </h1>
-
+            <h1 className="text-3xl font-bold text-[#7B1F0F] mb-6">Gestión de Productos</h1>
             <div className="grid md:grid-cols-2 gap-6 items-start">
-              {/* Formulario */}
               <div>
                 <ProductForm
                   onSubmit={editing ? handleEdit : handleAdd}
@@ -175,23 +173,19 @@ export const AdminPanel = () => {
                   editing={editing}
                 />
               </div>
-
-              {/* Lista */}
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-lg font-semibold text-gray-700">
                     Productos ({products.length})
                   </h2>
                 </div>
-                <ProductList
-                  products={products}
-                  onEdit={setEditing}
-                  onDelete={handleDelete}
-                />
+                <ProductList products={products} onEdit={setEditing} onDelete={handleDelete} />
               </div>
             </div>
           </div>
         )}
+
+        {seccion === 'pagina' && <PageEditor />}
       </main>
     </div>
   );
