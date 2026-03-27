@@ -3,11 +3,13 @@ import { Link } from 'react-router';
 import { Menu, ShoppingCart, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useCart } from '../contexts/CartContext';
+import { useEntry } from '../contexts/EntryContext';
 import { categories } from '../data/products';
 
 export const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { getCartCount } = useCart();
+  const { reset } = useEntry();
   const cartCount = getCartCount();
 
   return (
@@ -29,7 +31,7 @@ export const Navbar = () => {
             </button>
 
             {/* Logo */}
-            <Link to="/" className="flex items-center">
+            <Link to="/" className="flex items-center" onClick={reset}>
               <motion.img
                 src="/logoSF.png"
                 alt="La Eugenia"
