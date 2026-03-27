@@ -73,19 +73,7 @@ export const HeroSection = () => {
             </motion.button>
           </Link>
 
-          <a
-            href="https://wa.me/5491234567890?text=Hola!%20Quiero%20consultar%20sobre%20sus%20productos"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/30 text-white px-8 py-4 rounded-full font-semibold text-lg backdrop-blur-sm transition-colors"
-            >
-              Consultar por WhatsApp
-            </motion.button>
-          </a>
+        
         </motion.div>
       </div>
 
