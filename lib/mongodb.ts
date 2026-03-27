@@ -1,26 +1,14 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
 
-const uri = process.env.MONGODB_URI as string;
+let cachedClient: MongoClient | null = null;
 
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+export async function getDb(): Promise<Db> {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) throw new Error('MONGODB_URI no está configurada en las variables de entorno de Vercel');
 
-if (!uri) {
-  throw new Error('MONGODB_URI environment variable is not set');
-}
-
-if (process.env.NODE_ENV === 'development') {
-  const globalWithMongo = global as typeof globalThis & {
-    _mongoClientPromise?: Promise<MongoClient>;
-  };
-  if (!globalWithMongo._mongoClientPromise) {
-    client = new MongoClient(uri);
-    globalWithMongo._mongoClientPromise = client.connect();
+  if (!cachedClient) {
+    cachedClient = new MongoClient(uri);
+    await cachedClient.connect();
   }
-  clientPromise = globalWithMongo._mongoClientPromise;
-} else {
-  client = new MongoClient(uri);
-  clientPromise = client.connect();
+  return cachedClient.db('laeugenia');
 }
-
-export default clientPromise;
