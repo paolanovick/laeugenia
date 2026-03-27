@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { InfiniteCarousel } from '../components/InfiniteCarousel';
 import { CategoryCarousel } from '../components/CategoryCarousel';
-import { HeroSection } from '../components/HeroSection';
 import { useProducts } from '../contexts/ProductsContext';
 import { categories } from '../data/products';
 
@@ -11,9 +10,6 @@ export const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#120505] via-[#7B1F0F] to-[#120505]">
-      {/* Hero con imagen grande */}
-      <HeroSection />
-
       {/* Productos destacados - Carrusel infinito */}
       {featuredProducts.length > 0 && (
         <section id="productos" className="mb-20 pt-12">
