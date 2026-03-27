@@ -15,7 +15,7 @@ interface PageConfigContextType {
 const DEFAULT_CONFIG: PageConfig = {
   tickerMessages: [
     '🧉 Envíos a todo el país',
-    '💳 Pagá en efectivo y llevate un 10% de descuento',
+    'Pagá en efectivo y llevate un 10% de descuento',
     '🌿 Yerba mate 100% natural y artesanal',
     '⭐ Nuevos productos disponibles',
   ],
@@ -29,7 +29,13 @@ const STORAGE_KEY = 'eugenia_page_config';
 function load(): PageConfig {
   try {
     const s = localStorage.getItem(STORAGE_KEY);
-    return s ? { ...DEFAULT_CONFIG, ...JSON.parse(s) } : DEFAULT_CONFIG;
+    if (!s) return DEFAULT_CONFIG;
+    const saved = JSON.parse(s);
+    return {
+      ...DEFAULT_CONFIG,
+      ...saved,
+      tickerMessages: saved.tickerMessages?.length > 0 ? saved.tickerMessages : DEFAULT_CONFIG.tickerMessages,
+    };
   } catch {
     return DEFAULT_CONFIG;
   }

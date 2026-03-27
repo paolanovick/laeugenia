@@ -9,10 +9,10 @@ export const AnnouncementTicker = () => {
   const msgs = [...config.tickerMessages, ...config.tickerMessages, ...config.tickerMessages];
 
   return (
-    <div className="w-full bg-[#7B1F0F] overflow-hidden py-2 z-40">
+    <div className="w-full bg-[#1a0808] overflow-hidden py-2 border-b border-white/10">
       <div className="flex whitespace-nowrap animate-ticker">
         {msgs.map((msg, i) => (
-          <span key={i} className="text-sm font-semibold text-[#F5C080] mx-10">
+          <span key={i} className="text-sm font-medium text-white/90 mx-10">
             {msg}
           </span>
         ))}

@@ -29,9 +29,11 @@ export const Layout = () => {
 
   return (
     <div className="min-h-screen">
-      <AnnouncementTicker />
-      <Navbar />
-      <main className="pt-24">
+      <header className="fixed top-0 left-0 right-0 z-50">
+        <AnnouncementTicker />
+        <Navbar />
+      </header>
+      <main className="pt-[132px]">
         <Outlet />
       </main>
       <Footer />

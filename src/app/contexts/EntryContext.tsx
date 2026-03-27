@@ -15,6 +15,7 @@ export const EntryProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const enter = () => {
     localStorage.setItem(ENTRY_KEY, 'true');
+    sessionStorage.removeItem('eugenia_promo_shown');
     setEntered(true);
   };
 
