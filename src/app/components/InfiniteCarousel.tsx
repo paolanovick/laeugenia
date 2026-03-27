@@ -29,24 +29,21 @@ export const InfiniteCarousel = ({ products }: InfiniteCarouselProps) => {
 
     animationId = requestAnimationFrame(scroll);
 
-    // Pause on hover
-    const handleMouseEnter = () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    };
+    // Pause on hover (desktop) and touch (mobile)
+    const pause = () => { if (animationId) cancelAnimationFrame(animationId); };
+    const resume = () => { animationId = requestAnimationFrame(scroll); };
 
-    const handleMouseLeave = () => {
-      animationId = requestAnimationFrame(scroll);
-    };
-
-    scrollContainer.addEventListener('mouseenter', handleMouseEnter);
-    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
+    scrollContainer.addEventListener('mouseenter', pause);
+    scrollContainer.addEventListener('mouseleave', resume);
+    scrollContainer.addEventListener('touchstart', pause, { passive: true });
+    scrollContainer.addEventListener('touchend', resume, { passive: true });
 
     return () => {
       cancelAnimationFrame(animationId);
-      scrollContainer.removeEventListener('mouseenter', handleMouseEnter);
-      scrollContainer.removeEventListener('mouseleave', handleMouseLeave);
+      scrollContainer.removeEventListener('mouseenter', pause);
+      scrollContainer.removeEventListener('mouseleave', resume);
+      scrollContainer.removeEventListener('touchstart', pause);
+      scrollContainer.removeEventListener('touchend', resume);
     };
   }, []);
 
@@ -62,7 +59,7 @@ export const InfiniteCarousel = ({ products }: InfiniteCarouselProps) => {
       {/* Scrolling Container */}
       <div
         ref={scrollRef}
-        className="flex gap-6 overflow-x-hidden cursor-pointer"
+        className="flex gap-6 overflow-x-hidden cursor-pointer touch-none"
         style={{ scrollBehavior: 'auto' }}
       >
         {duplicatedProducts.map((product, index) => (

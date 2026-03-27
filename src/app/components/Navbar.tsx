@@ -103,7 +103,7 @@ export const Navbar = () => {
               <div className="p-6 space-y-2">
                 <Link
                   to="/"
-                  onClick={() => setSidebarOpen(false)}
+                  onClick={() => { setSidebarOpen(false); reset(); }}
                   className="block"
                 >
                   <motion.div
