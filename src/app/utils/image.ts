@@ -11,13 +11,13 @@ export function resolveImageUrl(url: string): string {
   // formato: /file/d/ID/view
   const matchFile = url.match(/drive\.google\.com\/file\/d\/([^/?]+)/);
   if (matchFile) {
-    return `https://lh3.googleusercontent.com/d/${matchFile[1]}`;
+    return `https://drive.google.com/thumbnail?id=${matchFile[1]}&sz=w800`;
   }
 
   // formato: open?id=ID
   const matchOpen = url.match(/drive\.google\.com\/open\?id=([^&]+)/);
   if (matchOpen) {
-    return `https://lh3.googleusercontent.com/d/${matchOpen[1]}`;
+    return `https://drive.google.com/thumbnail?id=${matchOpen[1]}&sz=w800`;
   }
 
   return url;
