@@ -99,7 +99,7 @@ export const ProductDetail = () => {
             className="space-y-4"
           >
             {/* Main Image */}
-            <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/20 aspect-square">
+            <div className="relative bg-[#1a0a0a] rounded-2xl overflow-hidden border border-white/20 aspect-square">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={selectedImage}
@@ -109,7 +109,7 @@ export const ProductDetail = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   transition={{ duration: 0.3 }}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain p-4"
                 />
               </AnimatePresence>
 

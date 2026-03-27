@@ -36,12 +36,12 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300"
         >
           {/* Image Container */}
-          <div className="relative h-64 overflow-hidden bg-gradient-to-br from-[#C4351A]/20 to-[#7B1F0F]/20">
+          <div className="relative h-64 overflow-hidden bg-[#1a0a0a]">
             <motion.img
               src={resolveImageUrl(product.images[0])}
               alt={product.name}
-              className="w-full h-full object-cover"
-              whileHover={{ scale: 1.1 }}
+              className="w-full h-full object-contain p-3"
+              whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.4 }}
             />
 
