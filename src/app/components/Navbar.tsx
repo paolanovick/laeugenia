@@ -86,7 +86,7 @@ export const Navbar = () => {
               <div className="p-6 border-b border-white/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <img src="/logo.png" alt="La Eugenia" className="h-14 w-auto drop-shadow-lg" />
+                    <img src="/logoSF.png" alt="La Eugenia" className="h-14 w-auto drop-shadow-lg" />
                   </div>
                   <button
                     onClick={() => setSidebarOpen(false)}
