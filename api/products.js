@@ -1,7 +1,6 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getDb } from '../lib/mongodb';
+const { getDb } = require('../lib/mongodb');
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -23,8 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
-  } catch (e: unknown) {
-    const message = e instanceof Error ? e.message : String(e);
-    return res.status(500).json({ error: message });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
   }
-}
+};
