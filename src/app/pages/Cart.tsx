@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { resolveImageUrl } from '../utils/image';
 import { useCart } from '../contexts/CartContext';
 import { toast } from 'sonner';
 
@@ -103,7 +104,7 @@ export const Cart = () => {
                   <div className="flex-shrink-0">
                     <div className="w-24 h-24 rounded-lg overflow-hidden bg-gradient-to-br from-[#C4351A]/20 to-[#7B1F0F]/20">
                       <img
-                        src={item.images[0]}
+                        src={resolveImageUrl(item.images[0])}
                         alt={item.name}
                         className="w-full h-full object-cover"
                       />

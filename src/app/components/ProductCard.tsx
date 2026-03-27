@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { Product } from '../data/products';
 import { useCart } from '../contexts/CartContext';
 import { toast } from 'sonner';
+import { resolveImageUrl } from '../utils/image';
 
 interface ProductCardProps {
   product: Product;
@@ -37,7 +38,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           {/* Image Container */}
           <div className="relative h-64 overflow-hidden bg-gradient-to-br from-[#C4351A]/20 to-[#7B1F0F]/20">
             <motion.img
-              src={product.images[0]}
+              src={resolveImageUrl(product.images[0])}
               alt={product.name}
               className="w-full h-full object-cover"
               whileHover={{ scale: 1.1 }}

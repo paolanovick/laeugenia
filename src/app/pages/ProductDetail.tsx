@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
+import { resolveImageUrl } from '../utils/image';
 import { products } from '../data/products';
 import { useCart } from '../contexts/CartContext';
 import { toast } from 'sonner';
@@ -101,7 +102,7 @@ export const ProductDetail = () => {
               <AnimatePresence mode="wait">
                 <motion.img
                   key={selectedImage}
-                  src={product.images[selectedImage]}
+                  src={resolveImageUrl(product.images[selectedImage])}
                   alt={product.name}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}

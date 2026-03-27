@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Product } from '../../data/products';
+import { resolveImageUrl } from '../../utils/image';
 
 const CATEGORIAS = [
   { id: 'mates', label: '🧉 Mates' },
@@ -195,7 +196,7 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
               />
               {url && (
                 <img
-                  src={url}
+                  src={resolveImageUrl(url)}
                   alt=""
                   className="w-10 h-10 object-cover rounded-lg border border-gray-200"
                   onError={(e) => (e.currentTarget.style.display = 'none')}

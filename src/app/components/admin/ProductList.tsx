@@ -1,4 +1,5 @@
 import { Product } from '../../data/products';
+import { resolveImageUrl } from '../../utils/image';
 
 const CATEGORY_LABELS: Record<string, string> = {
   mates: '🧉 Mates',
@@ -32,7 +33,7 @@ export const ProductList = ({ products, onEdit, onDelete }: Props) => {
           <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
             {product.images[0] ? (
               <img
-                src={product.images[0]}
+                src={resolveImageUrl(product.images[0])}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
