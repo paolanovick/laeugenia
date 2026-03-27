@@ -23,7 +23,7 @@ export const Cart = () => {
       .join('\n')}\n\nTotal: $${getCartTotal().toLocaleString()}`;
 
     window.open(
-      `https://wa.me/5491234567890?text=${encodeURIComponent(message)}`,
+      `https://wa.me/5491135811888?text=${encodeURIComponent(message)}`,
       '_blank'
     );
   };

@@ -60,7 +60,7 @@ export const ProductDetail = () => {
   const handleBuyWhatsApp = () => {
     const message = `Hola! Me interesa comprar:\n${product.name}\nCantidad: ${quantity}\nPrecio: $${(product.price * quantity).toLocaleString()}`;
     window.open(
-      `https://wa.me/5491234567890?text=${encodeURIComponent(message)}`,
+      `https://wa.me/5491135811888?text=${encodeURIComponent(message)}`,
       '_blank'
     );
   };

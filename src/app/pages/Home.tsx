@@ -109,7 +109,7 @@ export const Home = () => {
               Consultanos por WhatsApp y hacé tu pedido. Envíos a todo el país.
             </p>
             <motion.a
-              href="https://wa.me/5491234567890?text=Hola!%20Quiero%20consultar%20por%20productos"
+              href="https://wa.me/5491135811888?text=Hola!%20Quiero%20consultar%20por%20productos"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
