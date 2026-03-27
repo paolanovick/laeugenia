@@ -1,4 +1,4 @@
-const { getDb } = require('../lib/mongodb');
+const { getDb } = require('./_mongodb');
 
 module.exports = async function handler(req, res) {
   try {
