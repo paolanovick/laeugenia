@@ -5,6 +5,7 @@ import { Product } from '../data/products';
 import { useCart } from '../contexts/CartContext';
 import { toast } from 'sonner';
 import { resolveImageUrl } from '../utils/image';
+import { usePageConfig } from '../contexts/PageConfigContext';
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +14,7 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const { addToCart } = useCart();
+  const { config } = usePageConfig();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -95,7 +97,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                 <p className="text-2xl font-bold text-[#F5C080]">
                   ${product.price.toLocaleString()}
                 </p>
-                <p className="text-xs text-white/40">Envío gratis</p>
+                {config.shippingText && <p className="text-xs text-white/40">{config.shippingText}</p>}
               </div>
 
               <motion.div

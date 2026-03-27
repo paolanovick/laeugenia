@@ -5,6 +5,7 @@ export interface PageConfig {
   tickerEnabled: boolean;
   promoImage: string;
   promoEnabled: boolean;
+  shippingText: string;
 }
 
 interface PageConfigContextType {
@@ -23,6 +24,7 @@ const DEFAULT_CONFIG: PageConfig = {
   tickerEnabled: true,
   promoImage: '',
   promoEnabled: false,
+  shippingText: '',
 };
 
 const STORAGE_KEY = 'eugenia_page_config';

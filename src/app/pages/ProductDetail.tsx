@@ -15,12 +15,14 @@ import {
 import { resolveImageUrl } from '../utils/image';
 import { useCart } from '../contexts/CartContext';
 import { useProducts } from '../contexts/ProductsContext';
+import { usePageConfig } from '../contexts/PageConfigContext';
 import { toast } from 'sonner';
 import { ProductCard } from '../components/ProductCard';
 
 export const ProductDetail = () => {
   const { id } = useParams();
   const { products } = useProducts();
+  const { config } = usePageConfig();
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
 
@@ -200,7 +202,7 @@ export const ProductDetail = () => {
                 <p className="text-5xl font-bold text-[#F5C080] mb-2">
                   ${product.price.toLocaleString()}
                 </p>
-                <p className="text-white/60">Envío gratis a todo el país</p>
+                {config.shippingText && <p className="text-white/60">{config.shippingText}</p>}
               </div>
 
               {/* Description */}

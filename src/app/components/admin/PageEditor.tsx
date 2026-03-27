@@ -96,6 +96,19 @@ export const PageEditor = () => {
         </div>
       </div>
 
+      {/* ENVÍO */}
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h2 className="text-xl font-semibold text-[#7B1F0F] mb-4">🚚 Texto de envío</h2>
+        <p className="text-sm text-gray-400 mb-3">Aparece debajo del precio en las tarjetas y detalle de producto. Dejalo vacío para no mostrar nada.</p>
+        <input
+          type="text"
+          value={form.shippingText}
+          onChange={(e) => setForm((prev) => ({ ...prev, shippingText: e.target.value }))}
+          placeholder="Ej: Envío gratis a todo el país"
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
+        />
+      </div>
+
       {/* PUBLICIDAD MODAL */}
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
         <div className="flex items-center justify-between mb-4">

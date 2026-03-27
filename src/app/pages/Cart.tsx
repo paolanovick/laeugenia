@@ -3,11 +3,13 @@ import { Link } from 'react-router';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { resolveImageUrl } from '../utils/image';
 import { useCart } from '../contexts/CartContext';
+import { usePageConfig } from '../contexts/PageConfigContext';
 import { toast } from 'sonner';
 
 export const Cart = () => {
   const { cart, updateQuantity, removeFromCart, clearCart, getCartTotal } =
     useCart();
+  const { config } = usePageConfig();
 
   const handleRemoveItem = (productId: string, productName: string) => {
     removeFromCart(productId);
@@ -233,7 +235,7 @@ export const Cart = () => {
               <div className="space-y-2 text-sm text-white/60">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-[#F5C080] rounded-full" />
-                  <span>Envío gratis a todo el país</span>
+                  {config.shippingText && <span>{config.shippingText}</span>}
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-[#F5C080] rounded-full" />
