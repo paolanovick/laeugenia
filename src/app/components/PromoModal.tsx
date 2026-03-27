@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { usePageConfig } from '../contexts/PageConfigContext';
 import { resolveImageUrl } from '../utils/image';
 
-const SHOWN_KEY = 'eugenia_promo_shown';
-
 export const PromoModal = () => {
   const { config } = usePageConfig();
   const [visible, setVisible] = useState(false);
@@ -12,14 +10,9 @@ export const PromoModal = () => {
   useEffect(() => {
     if (!config.promoEnabled || !config.promoImage) return;
 
-    const alreadyShown = sessionStorage.getItem(SHOWN_KEY);
-    if (alreadyShown) return;
-
-    // Mostrar 800ms después de ingresar
+    // Mostrar 800ms después de montar (cada vez que se entra)
     const t = setTimeout(() => {
       setVisible(true);
-      sessionStorage.setItem(SHOWN_KEY, 'true');
-
       // Cerrar automáticamente a los 3 segundos
       setTimeout(() => setVisible(false), 3000);
     }, 800);

@@ -1,63 +1,71 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product, products as defaultProducts } from '../data/products';
 
 interface ProductsContextType {
   products: Product[];
-  addProduct: (product: Omit<Product, 'id'>) => void;
-  editProduct: (id: string, product: Omit<Product, 'id'>) => void;
-  deleteProduct: (id: string) => void;
+  loading: boolean;
+  addProduct: (product: Omit<Product, 'id'>) => Promise<void>;
+  editProduct: (id: string, product: Omit<Product, 'id'>) => Promise<void>;
+  deleteProduct: (id: string) => Promise<void>;
 }
 
 const ProductsContext = createContext<ProductsContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'eugenia_products';
-
-function loadProducts(): Product[] {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : defaultProducts;
-  } catch {
-    return defaultProducts;
-  }
-}
-
-function saveProducts(products: Product[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-}
+const API = '/api/products';
 
 export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [products, setProducts] = useState<Product[]>(loadProducts);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const addProduct = (data: Omit<Product, 'id'>) => {
-    const newProduct: Product = {
-      ...data,
-      id: `product-${Date.now()}`,
-    };
-    setProducts((prev) => {
-      const updated = [...prev, newProduct];
-      saveProducts(updated);
-      return updated;
+  useEffect(() => {
+    fetch(API)
+      .then((r) => r.json())
+      .then((data: Product[]) => {
+        // Si la base está vacía, mostramos los productos por defecto del código
+        setProducts(data.length > 0 ? data : defaultProducts);
+      })
+      .catch(() => {
+        // Sin conexión a la API: fallback a localStorage o defaults
+        try {
+          const saved = localStorage.getItem('eugenia_products');
+          setProducts(saved ? JSON.parse(saved) : defaultProducts);
+        } catch {
+          setProducts(defaultProducts);
+        }
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const addProduct = async (data: Omit<Product, 'id'>) => {
+    const newProduct: Product = { ...data, id: `product-${Date.now()}` };
+    const res = await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProduct),
     });
+    if (!res.ok) throw new Error('Error al guardar producto');
+    setProducts((prev) => [...prev, newProduct]);
   };
 
-  const editProduct = (id: string, data: Omit<Product, 'id'>) => {
-    setProducts((prev) => {
-      const updated = prev.map((p) => (p.id === id ? { ...data, id } : p));
-      saveProducts(updated);
-      return updated;
+  const editProduct = async (id: string, data: Omit<Product, 'id'>) => {
+    const updated = { ...data, id };
+    const res = await fetch(`/api/product/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated),
     });
+    if (!res.ok) throw new Error('Error al editar producto');
+    setProducts((prev) => prev.map((p) => (p.id === id ? updated : p)));
   };
 
-  const deleteProduct = (id: string) => {
-    setProducts((prev) => {
-      const updated = prev.filter((p) => p.id !== id);
-      saveProducts(updated);
-      return updated;
-    });
+  const deleteProduct = async (id: string) => {
+    const res = await fetch(`/api/product/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Error al eliminar producto');
+    setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
   return (
-    <ProductsContext.Provider value={{ products, addProduct, editProduct, deleteProduct }}>
+    <ProductsContext.Provider value={{ products, loading, addProduct, editProduct, deleteProduct }}>
       {children}
     </ProductsContext.Provider>
   );

@@ -10,6 +10,7 @@ export interface PageConfig {
 interface PageConfigContextType {
   config: PageConfig;
   saveConfig: (c: PageConfig) => void;
+  resetConfig: () => void;
 }
 
 const DEFAULT_CONFIG: PageConfig = {
@@ -51,8 +52,13 @@ export const PageConfigProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setConfig(c);
   };
 
+  const resetConfig = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    setConfig(DEFAULT_CONFIG);
+  };
+
   return (
-    <PageConfigContext.Provider value={{ config, saveConfig }}>
+    <PageConfigContext.Provider value={{ config, saveConfig, resetConfig }}>
       {children}
     </PageConfigContext.Provider>
   );

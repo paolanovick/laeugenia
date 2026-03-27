@@ -34,21 +34,33 @@ export const AdminPanel = () => {
     setTimeout(() => setMensaje(''), 3000);
   };
 
-  const handleAdd = (data: Omit<Product, 'id'>) => {
-    addProduct(data);
-    showMensaje(`✅ "${data.name}" agregado correctamente`);
+  const handleAdd = async (data: Omit<Product, 'id'>) => {
+    try {
+      await addProduct(data);
+      showMensaje(`✅ "${data.name}" agregado correctamente`);
+    } catch {
+      showMensaje('❌ Error al guardar. Revisá la conexión.');
+    }
   };
 
-  const handleEdit = (data: Omit<Product, 'id'>) => {
+  const handleEdit = async (data: Omit<Product, 'id'>) => {
     if (!editing) return;
-    editProduct(editing.id, data);
-    setEditing(null);
-    showMensaje(`✅ "${data.name}" editado correctamente`);
+    try {
+      await editProduct(editing.id, data);
+      setEditing(null);
+      showMensaje(`✅ "${data.name}" editado correctamente`);
+    } catch {
+      showMensaje('❌ Error al editar. Revisá la conexión.');
+    }
   };
 
-  const handleDelete = (id: string) => {
-    deleteProduct(id);
-    showMensaje('🗑️ Producto eliminado');
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteProduct(id);
+      showMensaje('🗑️ Producto eliminado');
+    } catch {
+      showMensaje('❌ Error al eliminar. Revisá la conexión.');
+    }
   };
 
   const cambiarSeccion = (s: Seccion) => {
