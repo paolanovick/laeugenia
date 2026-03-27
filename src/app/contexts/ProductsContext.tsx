@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, products as defaultProducts } from '../data/products';
+import { Product } from '../data/products';
 
 interface ProductsContextType {
   products: Product[];
@@ -19,19 +19,15 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   useEffect(() => {
     fetch(API)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`API error ${r.status}`);
+        return r.json();
+      })
       .then((data: Product[]) => {
-        // Si la base está vacía, mostramos los productos por defecto del código
-        setProducts(data.length > 0 ? data : defaultProducts);
+        setProducts(data);
       })
       .catch(() => {
-        // Sin conexión a la API: fallback a localStorage o defaults
-        try {
-          const saved = localStorage.getItem('eugenia_products');
-          setProducts(saved ? JSON.parse(saved) : defaultProducts);
-        } catch {
-          setProducts(defaultProducts);
-        }
+        setProducts([]);
       })
       .finally(() => setLoading(false));
   }, []);
