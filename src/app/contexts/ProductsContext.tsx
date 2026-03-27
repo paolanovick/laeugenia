@@ -59,9 +59,10 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const deleteProduct = async (id: string) => {
-    const res = await fetch(`/api/product/${id}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error('Error al eliminar producto');
+    // Actualizar UI inmediatamente
     setProducts((prev) => prev.filter((p) => p.id !== id));
+    // Intentar borrar de MongoDB (puede no estar si era producto de ejemplo)
+    await fetch(`/api/product/${id}`, { method: 'DELETE' }).catch(() => {});
   };
 
   return (

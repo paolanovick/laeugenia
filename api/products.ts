@@ -14,7 +14,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const col = client.db(DB).collection(COL);
 
   if (req.method === 'GET') {
-    const products = await col.find({}).toArray();
+    const products = await col.find({}, { projection: { _id: 0 } }).toArray();
     return res.status(200).json(products);
   }
 
