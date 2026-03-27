@@ -1,11 +1,13 @@
 import { useParams, Link } from 'react-router';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
-import { products, categories } from '../data/products';
+import { categories } from '../data/products';
+import { useProducts } from '../contexts/ProductsContext';
 import { ProductCard } from '../components/ProductCard';
 
 export const Category = () => {
   const { categoryId } = useParams();
+  const { products } = useProducts();
   const category = categories.find((c) => c.id === categoryId);
   const categoryProducts = products.filter((p) => p.category === categoryId);
 

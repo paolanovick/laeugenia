@@ -12,7 +12,7 @@ export const Home = () => {
     <div className="min-h-screen bg-gradient-to-b from-[#120505] via-[#7B1F0F] to-[#120505]">
       {/* Productos destacados - Carrusel infinito */}
       {featuredProducts.length > 0 && (
-        <section id="productos" className="mb-20 pt-40">
+        <section id="productos" className="mb-20 pt-16 scroll-mt-24">
           <div className="max-w-7xl mx-auto px-4 mb-8">
             <motion.div
               initial={{ opacity: 0, y: -20 }}

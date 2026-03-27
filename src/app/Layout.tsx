@@ -31,7 +31,7 @@ export const Layout = () => {
     <div className="min-h-screen">
       <AnnouncementTicker />
       <Navbar />
-      <main>
+      <main className="pt-24">
         <Outlet />
       </main>
       <Footer />

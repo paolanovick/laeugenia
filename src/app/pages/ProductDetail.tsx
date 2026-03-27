@@ -13,13 +13,14 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { resolveImageUrl } from '../utils/image';
-import { products } from '../data/products';
 import { useCart } from '../contexts/CartContext';
+import { useProducts } from '../contexts/ProductsContext';
 import { toast } from 'sonner';
 import { ProductCard } from '../components/ProductCard';
 
 export const ProductDetail = () => {
   const { id } = useParams();
+  const { products } = useProducts();
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
 
