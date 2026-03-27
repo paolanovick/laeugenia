@@ -59,6 +59,6 @@ export const HeroSection = ({ onEnter }: Props) => {
           Ingresar
         </motion.button>
       </div>
-    </section>
+r    </section>
   );
 };
