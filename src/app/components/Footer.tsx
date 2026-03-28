@@ -158,7 +158,7 @@ export const Footer = () => {
               © 2026 La Eugenia & Flia.. Todos los derechos reservados.
             </p>
             <div className="flex items-center space-x-4">
-              <span className="text-xs text-white/50">Hecho con</span>
+              <span className="text-xs text-white/50">Powered by</span>
               <motion.span
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
@@ -166,7 +166,7 @@ export const Footer = () => {
               >
                 ❤️
               </motion.span>
-              <span className="text-xs text-white/50">en Argentina</span>
+              <a href="https://www.concodigoart.com/" target="_blank" rel="noopener noreferrer" className="text-xs text-white/50 hover:text-white transition-colors">con Código ART</a>
             </div>
           </div>
         </div>
