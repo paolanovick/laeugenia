@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { resolveImageUrl } from '../utils/image';
 import { useCart } from '../contexts/CartContext';
@@ -11,13 +10,6 @@ export const Cart = () => {
   const { cart, updateQuantity, removeFromCart, clearCart, getCartTotal } =
     useCart();
   const { config } = usePageConfig();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (cart.length === 0) {
-      navigate('/', { replace: true });
-    }
-  }, []);
 
   const handleRemoveItem = (productId: string, productName: string) => {
     removeFromCart(productId);

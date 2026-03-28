@@ -11,16 +11,15 @@ interface EntryContextType {
 const EntryContext = createContext<EntryContextType | undefined>(undefined);
 
 export const EntryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [entered, setEntered] = useState(() => localStorage.getItem(ENTRY_KEY) === 'true');
+  const [entered, setEntered] = useState(() => sessionStorage.getItem(ENTRY_KEY) === 'true');
 
   const enter = () => {
-    localStorage.setItem(ENTRY_KEY, 'true');
-    sessionStorage.removeItem('eugenia_promo_shown');
+    sessionStorage.setItem(ENTRY_KEY, 'true');
     setEntered(true);
   };
 
   const reset = () => {
-    localStorage.removeItem(ENTRY_KEY);
+    sessionStorage.removeItem(ENTRY_KEY);
     setEntered(false);
   };
 
