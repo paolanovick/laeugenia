@@ -14,15 +14,7 @@ export const Footer = () => {
             viewport={{ once: true }}
             className="space-y-4"
           >
-            <div className="flex items-center space-x-3">
-              <span className="text-4xl">🧉</span>
-              <div>
-                <h3 className="text-xl font-bold">
-                  Mate<span className="text-[#F5C080]">Cultura</span>
-                </h3>
-                <p className="text-xs text-white/60">Tradición en cada mate</p>
-              </div>
-            </div>
+            <img src="/logoSF.png" alt="La Eugenia & Flia." className="h-20 w-auto drop-shadow-lg" />
             <p className="text-sm text-white/70 leading-relaxed">
               Mates artesanales, yerba premium y bombillas de calidad.
               Llevamos la tradición argentina a tu hogar con productos
