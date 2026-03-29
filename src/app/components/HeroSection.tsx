@@ -18,7 +18,7 @@ export const HeroSection = ({ onEnter }: Props) => {
       >
         <img
           src={HERO_IMAGE}
-          alt="La Eugenia Mates"
+          alt="La Eugenia & Flia. Mates"
           className="w-full h-full object-cover"
         />
       </motion.div>
@@ -31,7 +31,7 @@ export const HeroSection = ({ onEnter }: Props) => {
         {/* Logo */}
         <motion.img
           src="/logoSF.png"
-          alt="La Eugenia"
+          alt="La Eugenia & Flia."
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}

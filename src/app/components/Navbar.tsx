@@ -34,7 +34,7 @@ export const Navbar = () => {
             <Link to="/" className="flex items-center" onClick={reset}>
               <motion.img
                 src="/logoSF.png"
-                alt="La Eugenia"
+                alt="La Eugenia & Flia."
                 whileHover={{ scale: 1.05 }}
                 className="h-24 w-auto drop-shadow-lg"
               />
@@ -88,7 +88,7 @@ export const Navbar = () => {
               <div className="p-6 border-b border-white/10">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <img src="/logoSF.png" alt="La Eugenia" className="h-14 w-auto drop-shadow-lg" />
+                    <img src="/logoSF.png" alt="La Eugenia & Flia." className="h-14 w-auto drop-shadow-lg" />
                   </div>
                   <button
                     onClick={() => setSidebarOpen(false)}

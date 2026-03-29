@@ -37,7 +37,7 @@ export const AdminLogin = () => {
         {/* Logo */}
         <div className="text-center mb-8">
           <span className="text-5xl">🧉</span>
-          <h1 className="text-3xl font-bold text-white mt-3">La Eugenia</h1>
+          <h1 className="text-3xl font-bold text-white mt-3">La Eugenia & Flia.</h1>
           <p className="text-white/50 mt-1 text-sm">Panel Administrativo</p>
         </div>
 

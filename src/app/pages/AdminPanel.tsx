@@ -86,7 +86,7 @@ export const AdminPanel = () => {
       <aside className="hidden md:flex md:flex-col w-64 bg-[#7B1F0F] text-white py-6 px-4 shadow-xl min-h-screen">
         <div className="text-center border-b border-white/10 pb-6 mb-6">
           <span className="text-4xl">🧉</span>
-          <h2 className="text-xl font-bold mt-2">La Eugenia</h2>
+          <h2 className="text-xl font-bold mt-2">La Eugenia & Flia.</h2>
           <p className="text-white/50 text-xs mt-1">Admin Panel</p>
         </div>
 
@@ -124,7 +124,7 @@ export const AdminPanel = () => {
       >
         <div className="text-center border-b border-white/10 pb-6 mb-6">
           <span className="text-4xl">🧉</span>
-          <h2 className="text-xl font-bold mt-2">La Eugenia</h2>
+          <h2 className="text-xl font-bold mt-2">La Eugenia & Flia.</h2>
           <p className="text-white/50 text-xs mt-1">Admin Panel</p>
         </div>
 
