@@ -38,7 +38,10 @@ export const PageConfigProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   useEffect(() => {
     fetch(API)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`API error ${r.status}`);
+        return r.json();
+      })
       .then((data: Partial<PageConfig>) => {
         if (data && Object.keys(data).length > 0) {
           setConfig({

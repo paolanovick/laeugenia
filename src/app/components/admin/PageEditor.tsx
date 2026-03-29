@@ -156,6 +156,14 @@ export const PageEditor = () => {
               placeholder="O pegá una URL..."
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
             />
+            {form.promoImage && (
+              <button
+                onClick={() => setForm((prev) => ({ ...prev, promoImage: '', promoEnabled: false }))}
+                className="w-full bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                🗑️ Eliminar imagen de publicidad
+              </button>
+            )}
           </div>
 
           {form.promoImage && (
