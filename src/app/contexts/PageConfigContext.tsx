@@ -10,6 +10,7 @@ export interface PageConfig {
 
 interface PageConfigContextType {
   config: PageConfig;
+  loading: boolean;
   saveConfig: (c: PageConfig) => Promise<void>;
   resetConfig: () => void;
 }
@@ -33,6 +34,7 @@ const PageConfigContext = createContext<PageConfigContextType | undefined>(undef
 
 export const PageConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [config, setConfig] = useState<PageConfig>(DEFAULT_CONFIG);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(API)
@@ -49,7 +51,8 @@ export const PageConfigProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           });
         }
       })
-      .catch(() => {/* usa DEFAULT_CONFIG */});
+      .catch(() => {/* usa DEFAULT_CONFIG */})
+      .finally(() => setLoading(false));
   }, []);
 
   const saveConfig = async (c: PageConfig) => {
@@ -64,7 +67,7 @@ export const PageConfigProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const resetConfig = () => setConfig(DEFAULT_CONFIG);
 
   return (
-    <PageConfigContext.Provider value={{ config, saveConfig, resetConfig }}>
+    <PageConfigContext.Provider value={{ config, loading, saveConfig, resetConfig }}>
       {children}
     </PageConfigContext.Provider>
   );

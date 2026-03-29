@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { usePageConfig, PageConfig } from '../../contexts/PageConfigContext';
 import { resolveImageUrl } from '../../utils/image';
 
@@ -20,6 +20,11 @@ export const PageEditor = () => {
   const [uploading, setUploading] = useState(false);
   const [saved, setSaved] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Sincronizar form cuando llega la config de la API
+  useEffect(() => {
+    setForm({ ...config });
+  }, [config]);
 
   const handleSave = async () => {
     await saveConfig(form);

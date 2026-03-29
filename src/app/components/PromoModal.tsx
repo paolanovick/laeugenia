@@ -4,21 +4,19 @@ import { usePageConfig } from '../contexts/PageConfigContext';
 import { resolveImageUrl } from '../utils/image';
 
 export const PromoModal = () => {
-  const { config } = usePageConfig();
+  const { config, loading } = usePageConfig();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!config.promoEnabled || !config.promoImage) return;
+    if (loading || !config.promoEnabled || !config.promoImage) return;
 
-    // Mostrar 800ms después de montar (cada vez que se entra)
     const t = setTimeout(() => {
       setVisible(true);
-      // Cerrar automáticamente a los 3 segundos
       setTimeout(() => setVisible(false), 3000);
     }, 800);
 
     return () => clearTimeout(t);
-  }, [config.promoEnabled, config.promoImage]);
+  }, [loading, config.promoEnabled, config.promoImage]);
 
   return (
     <AnimatePresence>
