@@ -21,8 +21,8 @@ export const PageEditor = () => {
   const [saved, setSaved] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const handleSave = () => {
-    saveConfig(form);
+  const handleSave = async () => {
+    await saveConfig(form);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export interface PageConfig {
   tickerMessages: string[];
@@ -10,7 +10,7 @@ export interface PageConfig {
 
 interface PageConfigContextType {
   config: PageConfig;
-  saveConfig: (c: PageConfig) => void;
+  saveConfig: (c: PageConfig) => Promise<void>;
   resetConfig: () => void;
 }
 
@@ -27,37 +27,41 @@ const DEFAULT_CONFIG: PageConfig = {
   shippingText: '',
 };
 
-const STORAGE_KEY = 'eugenia_page_config';
-
-function load(): PageConfig {
-  try {
-    const s = localStorage.getItem(STORAGE_KEY);
-    if (!s) return DEFAULT_CONFIG;
-    const saved = JSON.parse(s);
-    return {
-      ...DEFAULT_CONFIG,
-      ...saved,
-      tickerMessages: saved.tickerMessages?.length > 0 ? saved.tickerMessages : DEFAULT_CONFIG.tickerMessages,
-    };
-  } catch {
-    return DEFAULT_CONFIG;
-  }
-}
+const API = '/api/config';
 
 const PageConfigContext = createContext<PageConfigContextType | undefined>(undefined);
 
 export const PageConfigProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [config, setConfig] = useState<PageConfig>(load);
+  const [config, setConfig] = useState<PageConfig>(DEFAULT_CONFIG);
 
-  const saveConfig = (c: PageConfig) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(c));
+  useEffect(() => {
+    fetch(API)
+      .then((r) => r.json())
+      .then((data: Partial<PageConfig>) => {
+        if (data && Object.keys(data).length > 0) {
+          setConfig({
+            ...DEFAULT_CONFIG,
+            ...data,
+            tickerMessages:
+              Array.isArray(data.tickerMessages) && data.tickerMessages.length > 0
+                ? data.tickerMessages
+                : DEFAULT_CONFIG.tickerMessages,
+          });
+        }
+      })
+      .catch(() => {/* usa DEFAULT_CONFIG */});
+  }, []);
+
+  const saveConfig = async (c: PageConfig) => {
+    await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(c),
+    });
     setConfig(c);
   };
 
-  const resetConfig = () => {
-    localStorage.removeItem(STORAGE_KEY);
-    setConfig(DEFAULT_CONFIG);
-  };
+  const resetConfig = () => setConfig(DEFAULT_CONFIG);
 
   return (
     <PageConfigContext.Provider value={{ config, saveConfig, resetConfig }}>
