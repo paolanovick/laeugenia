@@ -16,7 +16,7 @@ export const Footer = () => {
           >
             <img src="/logoSF.png" alt="La Eugenia & Flia." className="h-20 w-auto drop-shadow-lg" />
             <p className="text-sm text-white/70 leading-relaxed">
-              Mates artesanales, yerba premium y bombillas de calidad.
+              Mates artesanales, yerba premium, bombillas, artículos materos y combos especiales.
               Llevamos la tradición argentina a tu hogar con productos
               seleccionados por expertos.
             </p>

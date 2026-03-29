@@ -126,6 +126,8 @@ export const Cart = () => {
                           {item.category === 'mates' && '🧉 Mates'}
                           {item.category === 'yerba' && '🌿 Yerba & Blends'}
                           {item.category === 'bombillas' && '✨ Bombillas'}
+                          {item.category === 'articulos' && '🪔 Artículos Materos'}
+                          {item.category === 'combos' && '🎁 Combos y Regalos'}
                         </p>
                       </div>
                       <button

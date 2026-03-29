@@ -108,6 +108,8 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                 {product.category === 'mates' && '🧉'}
                 {product.category === 'yerba' && '🌿'}
                 {product.category === 'bombillas' && '✨'}
+                {product.category === 'articulos' && '🪔'}
+                {product.category === 'combos' && '🎁'}
               </motion.div>
             </div>
           </div>

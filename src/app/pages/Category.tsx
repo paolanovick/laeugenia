@@ -67,6 +67,10 @@ export const Category = () => {
               'Explorá nuestros blends exclusivos y yerba mate premium seleccionada.'}
             {category.id === 'bombillas' &&
               'Encontrá la bombilla perfecta entre nuestra selección de alpaca y acero inoxidable.'}
+            {category.id === 'articulos' &&
+              'Todo lo que necesitás para disfrutar tu mate al máximo.'}
+            {category.id === 'combos' &&
+              'Combos armados y regalos especiales para los amantes del mate.'}
           </p>
         </motion.div>
 

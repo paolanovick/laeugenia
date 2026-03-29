@@ -178,6 +178,8 @@ export const ProductDetail = () => {
                 {product.category === 'mates' && '🧉 Mates'}
                 {product.category === 'yerba' && '🌿 Yerba & Blends'}
                 {product.category === 'bombillas' && '✨ Bombillas'}
+                {product.category === 'articulos' && '🪔 Artículos Materos'}
+                {product.category === 'combos' && '🎁 Combos y Regalos'}
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
