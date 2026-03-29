@@ -44,7 +44,7 @@ export const HeroSection = ({ onEnter }: Props) => {
           transition={{ delay: 0.7 }}
           className="text-white/70 text-lg md:text-xl mb-10 max-w-md"
         >
-          Mates, yerbas y bombillas con tradición en cada sorbo.
+          Mates, yerbas, bombillas, artículos materos y combos especiales.
         </motion.p>
 
         <motion.button

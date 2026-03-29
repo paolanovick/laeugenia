@@ -7,12 +7,16 @@ const TABS = [
   { id: 'mates', label: '🧉 Mates' },
   { id: 'yerba', label: '🌿 Yerba & Blends' },
   { id: 'bombillas', label: '✨ Bombillas' },
+  { id: 'articulos', label: '🪔 Artículos Materos' },
+  { id: 'combos', label: '🎁 Combos y Regalos' },
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
   mates: '🧉 Mates',
   yerba: '🌿 Yerba & Blends',
   bombillas: '✨ Bombillas',
+  articulos: '🪔 Artículos Materos',
+  combos: '🎁 Combos y Regalos',
 };
 
 interface Props {
