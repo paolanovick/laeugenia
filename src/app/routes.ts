@@ -7,6 +7,9 @@ import { Category } from './pages/Category';
 import { NotFound } from './pages/NotFound';
 import { AdminLogin } from './pages/AdminLogin';
 import { AdminPanel } from './pages/AdminPanel';
+import { Terms } from './pages/Terms';
+import { Privacy } from './pages/Privacy';
+import { Shipping } from './pages/Shipping';
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +20,9 @@ export const router = createBrowserRouter([
       { path: 'product/:id', Component: ProductDetail },
       { path: 'cart', Component: Cart },
       { path: 'category/:categoryId', Component: Category },
+      { path: 'terms', Component: Terms },
+      { path: 'privacy', Component: Privacy },
+      { path: 'shipping', Component: Shipping },
       { path: '*', Component: NotFound },
     ],
   },

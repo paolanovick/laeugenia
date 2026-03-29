@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Instagram, Facebook, Twitter, Mail } from 'lucide-react';
+import { Instagram, Facebook, Mail } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export const Footer = () => {
@@ -116,14 +116,14 @@ export const Footer = () => {
                   Envíos y Devoluciones
                 </motion.div>
               </Link>
-              <Link to="/contact">
+              <a href="mailto:claudiavivianamikikiuk@yahoo.com.ar">
                 <motion.div
                   whileHover={{ x: 8 }}
                   className="text-sm text-white/70 hover:text-[#F5C080] transition-colors inline-block"
                 >
                   Contacto
                 </motion.div>
-              </Link>
+              </a>
             </div>
           </motion.div>
         </div>
