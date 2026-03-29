@@ -21,6 +21,8 @@ const CATEGORIAS = [
   { id: 'mates', label: '🧉 Mates' },
   { id: 'yerba', label: '🌿 Yerba & Blends' },
   { id: 'bombillas', label: '✨ Bombillas' },
+  { id: 'articulos', label: '🪔 Artículos Materos' },
+  { id: 'combos', label: '🎁 Combos y Regalos' },
 ];
 
 type ProductFormData = Omit<Product, 'id'>;

@@ -68,6 +68,8 @@ export const Home = () => {
                   {category.id === 'mates' && 'Mates artesanales seleccionados, curados con cariño y tradición.'}
                   {category.id === 'yerba' && 'Blends exclusivos y yerba mate premium para cada momento del día.'}
                   {category.id === 'bombillas' && 'Bombillas de primera calidad en alpaca y acero inoxidable.'}
+                  {category.id === 'articulos' && 'Todo lo que necesitás para disfrutar tu mate al máximo.'}
+                  {category.id === 'combos' && 'Combos armados y regalos especiales para los amantes del mate.'}
                 </p>
               </div>
 
