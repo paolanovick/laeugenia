@@ -33,7 +33,7 @@ export const Footer = () => {
             <h4 className="font-semibold text-lg mb-4">Seguinos</h4>
             <div className="flex flex-col space-y-3">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/laeugenia.flia/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group"
@@ -50,7 +50,7 @@ export const Footer = () => {
               </a>
 
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=61551953244438"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group"
@@ -66,24 +66,9 @@ export const Footer = () => {
                 </motion.div>
               </a>
 
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group"
-              >
-                <motion.div
-                  whileHover={{ x: 8 }}
-                  className="flex items-center space-x-3 text-white/70 hover:text-[#F5C080] transition-colors"
-                >
-                  <div className="p-2 rounded-lg bg-white/5 group-hover:bg-[#F5C080]/20 transition-colors">
-                    <Twitter className="w-5 h-5" />
-                  </div>
-                  <span className="text-sm">Twitter</span>
-                </motion.div>
-              </a>
+              
 
-              <a href="mailto:info@matecultura.com" className="group">
+              <a href="mailto:claudiavivianamikikiuk@yahoo.com.ar" className="group">
                 <motion.div
                   whileHover={{ x: 8 }}
                   className="flex items-center space-x-3 text-white/70 hover:text-[#F5C080] transition-colors"
