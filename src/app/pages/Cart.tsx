@@ -258,8 +258,9 @@ export const Cart = () => {
                 clearCart();
                 toast.success('Carrito vaciado');
               }}
-              className="w-full py-3 text-white/50 hover:text-red-400 transition-colors text-sm"
+              className="w-full py-3 flex items-center justify-center gap-2 border border-red-500/30 text-red-400/70 hover:text-red-400 hover:border-red-500/60 hover:bg-red-500/10 rounded-xl transition-all text-sm"
             >
+              <Trash2 className="w-4 h-4" />
               Vaciar carrito
             </motion.button>
           </div>

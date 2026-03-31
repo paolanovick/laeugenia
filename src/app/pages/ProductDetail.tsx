@@ -24,10 +24,13 @@ export const ProductDetail = () => {
   const { products } = useProducts();
   const { config } = usePageConfig();
   const product = products.find((p) => p.id === id);
-  const { addToCart } = useCart();
+  const { addToCart, updateQuantity: updateCartQuantity, cart } = useCart();
 
   const [selectedImage, setSelectedImage] = useState(0);
-  const [quantity, setQuantity] = useState(1);
+
+  // Quantity is derived from cart so the navbar updates in real time
+  const cartItem = cart.find((item) => item.id === id);
+  const quantity = cartItem?.quantity ?? 0;
 
   if (!product) {
     return (
@@ -51,17 +54,16 @@ export const ProductDetail = () => {
     .slice(0, 4);
 
   const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
-    }
-    toast.success(`${quantity}x ${product.name} agregado al carrito`, {
+    addToCart(product);
+    toast.success(`${product.name} agregado al carrito`, {
       icon: '🧉',
     });
   };
 
   const handleBuyWhatsApp = () => {
-    const unitStr = quantity === 1 ? 'unidad' : 'unidades';
-    const message = `¡Hola! 😊 Me interesa comprar en *La Eugenia & Flia.*:\n\n🧉 *${product.name}*\nCantidad: ${quantity} ${unitStr}\nPrecio: $${(product.price * quantity).toLocaleString('es-AR')}\n\n¡Quedo a la espera, muchas gracias! 🙏`;
+    const qty = Math.max(1, quantity);
+    const unitStr = qty === 1 ? 'unidad' : 'unidades';
+    const message = `¡Hola! 😊 Me interesa comprar en *La Eugenia & Flia.*:\n\n🧉 *${product.name}*\nCantidad: ${qty} ${unitStr}\nPrecio: $${(product.price * qty).toLocaleString('es-AR')}\n\n¡Quedo a la espera, muchas gracias! 🙏`;
     const number = config.whatsappNumber || '5491135811888';
     window.open(
       `https://wa.me/${number}?text=${encodeURIComponent(message)}`,
@@ -230,15 +232,16 @@ export const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Quantity Selector */}
+              {/* Quantity Selector — operates directly on cart */}
               <div className="mb-8">
                 <label className="block text-white mb-2 font-medium">
-                  Cantidad
+                  Cantidad en carrito
                 </label>
                 <div className="flex items-center gap-4">
                   <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-lg border border-white/20 transition-colors"
+                    onClick={() => updateCartQuantity(product.id, quantity - 1)}
+                    disabled={quantity === 0}
+                    className="w-12 h-12 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:cursor-not-allowed text-white rounded-lg border border-white/20 transition-colors"
                   >
                     -
                   </button>
@@ -246,7 +249,7 @@ export const ProductDetail = () => {
                     {quantity}
                   </span>
                   <button
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() => addToCart(product)}
                     className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-lg border border-white/20 transition-colors"
                   >
                     +

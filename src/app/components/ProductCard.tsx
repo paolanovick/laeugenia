@@ -63,38 +63,38 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             )}
 
             {/* Quick Actions */}
-            <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={handleAddToCart}
-                className="flex-1 bg-[#F5C080] hover:bg-[#D07030] text-[#7B1F0F] px-4 py-2 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 shadow-lg"
+                className="relative flex-1 overflow-hidden border border-[#c8945a] text-[#c8945a] px-4 py-2 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 shadow-lg group/btn"
               >
-                <ShoppingCart className="w-4 h-4" />
-                Agregar
+                <span className="absolute inset-0 bg-[#c8945a] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
+                <ShoppingCart className="w-4 h-4 relative z-10 group-hover/btn:text-[#0e0b08] transition-colors duration-300" />
+                <span className="relative z-10 group-hover/btn:text-[#0e0b08] transition-colors duration-300">Agregar</span>
               </motion.button>
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white/90 hover:bg-white px-4 py-2 rounded-lg flex items-center justify-center shadow-lg"
+                whileTap={{ scale: 0.97 }}
+                className="relative overflow-hidden border border-white/30 text-white/70 px-4 py-2 rounded-lg flex items-center justify-center shadow-lg group/eye"
               >
-                <Eye className="w-4 h-4 text-[#7B1F0F]" />
+                <span className="absolute inset-0 bg-white/90 translate-y-full group-hover/eye:translate-y-0 transition-transform duration-300 ease-out" />
+                <Eye className="w-4 h-4 relative z-10 group-hover/eye:text-[#7B1F0F] transition-colors duration-300" />
               </motion.div>
             </div>
           </div>
 
           {/* Content */}
           <div className="p-5">
-            <h3 className="font-semibold text-white text-lg mb-2 line-clamp-1 group-hover:text-[#F5C080] transition-colors">
+            <h3 className="font-serif font-semibold text-white text-lg mb-2 line-clamp-1 group-hover:text-[#c8945a] transition-colors">
               {product.name}
             </h3>
-            <p className="text-white/60 text-sm mb-4 line-clamp-2">
+            <p className="text-white/50 text-sm mb-4 line-clamp-2 font-light">
               {product.description}
             </p>
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold text-[#F5C080]">
+                <p className="text-2xl font-bold text-[#c8945a]">
                   ${product.price.toLocaleString('es-AR')}
                 </p>
                 {config.shippingText && <p className="text-xs text-white/40">{config.shippingText}</p>}
