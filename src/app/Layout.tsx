@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
+import { useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { CookieBanner } from './components/CookieBanner';
@@ -7,6 +8,14 @@ import { PromoModal } from './components/PromoModal';
 import { Toaster } from './components/ui/sonner';
 import { HeroSection } from './components/HeroSection';
 import { useEntry } from './contexts/EntryContext';
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+};
 
 export const Layout = () => {
   const { entered, enter } = useEntry();
@@ -34,6 +43,7 @@ export const Layout = () => {
         <Navbar />
       </header>
       <main className="pt-[132px]">
+        <ScrollToTop />
         <Outlet />
       </main>
       <Footer />
