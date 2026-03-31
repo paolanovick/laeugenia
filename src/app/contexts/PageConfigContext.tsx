@@ -7,6 +7,13 @@ export interface PageConfig {
   promoEnabled: boolean;
   shippingText: string;
   whatsappNumber: string;
+  bannerEnabled: boolean;
+  bannerEmoji: string;
+  bannerTitle: string;
+  bannerSubtitle: string;
+  bannerCtaText: string;
+  bannerCtaLink: string;
+  bannerColor: 'red' | 'green' | 'gold' | 'purple' | 'blue';
 }
 
 interface PageConfigContextType {
@@ -28,6 +35,13 @@ const DEFAULT_CONFIG: PageConfig = {
   promoEnabled: false,
   shippingText: '',
   whatsappNumber: '5491135811888',
+  bannerEnabled: false,
+  bannerEmoji: '🎁',
+  bannerTitle: '',
+  bannerSubtitle: '',
+  bannerCtaText: 'Ver productos',
+  bannerCtaLink: '/',
+  bannerColor: 'red',
 };
 
 const API = '/api/config';

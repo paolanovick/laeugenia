@@ -114,6 +114,135 @@ export const PageEditor = () => {
         />
       </div>
 
+      {/* BANNER DE OFERTA */}
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold text-[#7B1F0F]">🎯 Banner de oferta</h2>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.bannerEnabled}
+              onChange={(e) => setForm((prev) => ({ ...prev, bannerEnabled: e.target.checked }))}
+              className="w-4 h-4 accent-[#7B1F0F]"
+            />
+            <span className="text-sm font-medium text-gray-600">Activado</span>
+          </label>
+        </div>
+        <p className="text-sm text-gray-400 mb-5">
+          Aparece en la página principal entre los destacados y las categorías. Ideal para fechas especiales, liquidaciones u ofertas.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Emoji</label>
+            <input
+              type="text"
+              value={form.bannerEmoji}
+              onChange={(e) => setForm((prev) => ({ ...prev, bannerEmoji: e.target.value }))}
+              placeholder="🎁"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Color</label>
+            <div className="flex gap-2">
+              {(['red', 'green', 'gold', 'purple', 'blue'] as const).map((color) => {
+                const dots: Record<string, string> = {
+                  red: 'bg-red-600',
+                  green: 'bg-green-700',
+                  gold: 'bg-yellow-600',
+                  purple: 'bg-purple-700',
+                  blue: 'bg-blue-800',
+                };
+                return (
+                  <button
+                    key={color}
+                    type="button"
+                    onClick={() => setForm((prev) => ({ ...prev, bannerColor: color }))}
+                    className={`w-8 h-8 rounded-full ${dots[color]} border-2 transition-all ${
+                      form.bannerColor === color ? 'border-gray-800 scale-110' : 'border-transparent'
+                    }`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-600 mb-1">Título principal</label>
+            <input
+              type="text"
+              value={form.bannerTitle}
+              onChange={(e) => setForm((prev) => ({ ...prev, bannerTitle: e.target.value }))}
+              placeholder="Ej: DÍA DE LA MADRE · 20% OFF"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-600 mb-1">Subtítulo</label>
+            <input
+              type="text"
+              value={form.bannerSubtitle}
+              onChange={(e) => setForm((prev) => ({ ...prev, bannerSubtitle: e.target.value }))}
+              placeholder="Ej: En todos los combos hasta el 12/5 · Envío gratis"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Texto del botón</label>
+            <input
+              type="text"
+              value={form.bannerCtaText}
+              onChange={(e) => setForm((prev) => ({ ...prev, bannerCtaText: e.target.value }))}
+              placeholder="Ver combos"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-1">Link del botón</label>
+            <input
+              type="text"
+              value={form.bannerCtaLink}
+              onChange={(e) => setForm((prev) => ({ ...prev, bannerCtaLink: e.target.value }))}
+              placeholder="/category/combos"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
+            />
+            <p className="text-xs text-gray-400 mt-1">Interno: /category/combos — Externo: https://...</p>
+          </div>
+        </div>
+
+        {/* Preview */}
+        {form.bannerTitle && (
+          <div className="mt-5 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <p className="text-xs text-gray-400 mb-2 uppercase tracking-wider">Vista previa</p>
+            <div
+              className={`rounded-2xl px-6 py-5 flex items-center gap-4 text-white ${
+                form.bannerColor === 'red' ? 'bg-gradient-to-r from-[#C4351A] to-[#8B1A0A]' :
+                form.bannerColor === 'green' ? 'bg-gradient-to-r from-[#1a6b2a] to-[#0f4019]' :
+                form.bannerColor === 'gold' ? 'bg-gradient-to-r from-[#7B4A00] to-[#4A2C00]' :
+                form.bannerColor === 'purple' ? 'bg-gradient-to-r from-[#4B1D8A] to-[#2D1155]' :
+                'bg-gradient-to-r from-[#0f3460] to-[#0a1f3d]'
+              }`}
+            >
+              {form.bannerEmoji && <span className="text-4xl">{form.bannerEmoji}</span>}
+              <div className="flex-1 min-w-0">
+                <p className="font-extrabold text-xl uppercase truncate">{form.bannerTitle}</p>
+                {form.bannerSubtitle && <p className="text-white/80 text-sm mt-0.5 truncate">{form.bannerSubtitle}</p>}
+              </div>
+              {form.bannerCtaText && (
+                <span className="bg-white text-gray-800 px-4 py-2 rounded-full text-sm font-bold flex-shrink-0">
+                  {form.bannerCtaText} →
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* WHATSAPP */}
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
         <h2 className="text-xl font-semibold text-[#7B1F0F] mb-4">📱 Número de WhatsApp</h2>

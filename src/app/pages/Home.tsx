@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { InfiniteCarousel } from '../components/InfiniteCarousel';
 import { CategoryCarousel } from '../components/CategoryCarousel';
+import { PromoBanner } from '../components/PromoBanner';
 import { useProducts } from '../contexts/ProductsContext';
 import { categories } from '../data/products';
 
@@ -29,6 +30,9 @@ export const Home = () => {
           <InfiniteCarousel products={featuredProducts} />
         </section>
       )}
+
+      {/* Banner de oferta */}
+      <PromoBanner />
 
       {/* Secciones por categoría */}
       <section id="categorias" className="max-w-7xl mx-auto px-4 pb-20">
