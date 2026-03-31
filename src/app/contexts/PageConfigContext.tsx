@@ -6,6 +6,7 @@ export interface PageConfig {
   promoImage: string;
   promoEnabled: boolean;
   shippingText: string;
+  whatsappNumber: string;
 }
 
 interface PageConfigContextType {
@@ -26,6 +27,7 @@ const DEFAULT_CONFIG: PageConfig = {
   promoImage: '',
   promoEnabled: false,
   shippingText: '',
+  whatsappNumber: '5491135811888',
 };
 
 const API = '/api/config';

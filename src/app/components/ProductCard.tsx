@@ -95,7 +95,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-2xl font-bold text-[#F5C080]">
-                  ${product.price.toLocaleString()}
+                  ${product.price.toLocaleString('es-AR')}
                 </p>
                 {config.shippingText && <p className="text-xs text-white/40">{config.shippingText}</p>}
               </div>

@@ -60,9 +60,11 @@ export const ProductDetail = () => {
   };
 
   const handleBuyWhatsApp = () => {
-    const message = `Hola! Me interesa comprar:\n${product.name}\nCantidad: ${quantity}\nPrecio: $${(product.price * quantity).toLocaleString()}`;
+    const unitStr = quantity === 1 ? 'unidad' : 'unidades';
+    const message = `¡Hola! 😊 Me interesa comprar en *La Eugenia & Flia.*:\n\n🧉 *${product.name}*\nCantidad: ${quantity} ${unitStr}\nPrecio: $${(product.price * quantity).toLocaleString('es-AR')}\n\n¡Quedo a la espera, muchas gracias! 🙏`;
+    const number = config.whatsappNumber || '5491135811888';
     window.open(
-      `https://wa.me/5491135811888?text=${encodeURIComponent(message)}`,
+      `https://wa.me/${number}?text=${encodeURIComponent(message)}`,
       '_blank'
     );
   };
@@ -202,7 +204,7 @@ export const ProductDetail = () => {
               {/* Price */}
               <div className="mb-8">
                 <p className="text-5xl font-bold text-[#F5C080] mb-2">
-                  ${product.price.toLocaleString()}
+                  ${product.price.toLocaleString('es-AR')}
                 </p>
                 {config.shippingText && <p className="text-white/60">{config.shippingText}</p>}
               </div>

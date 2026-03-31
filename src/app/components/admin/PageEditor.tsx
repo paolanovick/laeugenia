@@ -114,6 +114,21 @@ export const PageEditor = () => {
         />
       </div>
 
+      {/* WHATSAPP */}
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h2 className="text-xl font-semibold text-[#7B1F0F] mb-4">📱 Número de WhatsApp</h2>
+        <p className="text-sm text-gray-400 mb-3">
+          Número al que llegan los pedidos. Incluí el código de país sin el "+". Ej: 5491135811888
+        </p>
+        <input
+          type="text"
+          value={form.whatsappNumber}
+          onChange={(e) => setForm((prev) => ({ ...prev, whatsappNumber: e.target.value }))}
+          placeholder="5491135811888"
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
+        />
+      </div>
+
       {/* PUBLICIDAD MODAL */}
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
         <div className="flex items-center justify-between mb-4">

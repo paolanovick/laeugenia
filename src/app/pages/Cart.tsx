@@ -4,12 +4,14 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { resolveImageUrl } from '../utils/image';
 import { useCart } from '../contexts/CartContext';
 import { usePageConfig } from '../contexts/PageConfigContext';
+import { useProducts } from '../contexts/ProductsContext';
 import { toast } from 'sonner';
 
 export const Cart = () => {
-  const { cart, updateQuantity, removeFromCart, clearCart, getCartTotal } =
+  const { cart, addToCart, updateQuantity, removeFromCart, clearCart, getCartTotal } =
     useCart();
   const { config } = usePageConfig();
+  const { products } = useProducts();
 
   const handleRemoveItem = (productId: string, productName: string) => {
     removeFromCart(productId);
@@ -17,18 +19,38 @@ export const Cart = () => {
   };
 
   const handleCheckoutWhatsApp = () => {
-    const message = `Hola! Quiero realizar el siguiente pedido:\n\n${cart
-      .map(
-        (item) =>
-          `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toLocaleString()}`
-      )
-      .join('\n')}\n\nTotal: $${getCartTotal().toLocaleString()}`;
-
+    const itemLines = cart
+      .map((item) => {
+        const unitStr = item.quantity === 1 ? 'unidad' : 'unidades';
+        return `  • *${item.name}* — ${item.quantity} ${unitStr} — $${(item.price * item.quantity).toLocaleString('es-AR')}`;
+      })
+      .join('\n');
+    const message = `¡Hola! 😊 Quiero hacer el siguiente pedido en *La Eugenia & Flia.*:\n\n🧉 *Detalle del pedido:*\n${itemLines}\n\n💰 *Total: $${getCartTotal().toLocaleString('es-AR')}*\n\n¡Muchas gracias! 🙌`;
+    const number = config.whatsappNumber || '5491135811888';
     window.open(
-      `https://wa.me/5491135811888?text=${encodeURIComponent(message)}`,
+      `https://wa.me/${number}?text=${encodeURIComponent(message)}`,
       '_blank'
     );
   };
+
+  // Lógica de upsell: sugiere productos complementarios según lo que hay en el carrito
+  const cartCategories = new Set(cart.map((item) => item.category));
+  const upsellSuggestions = (() => {
+    const suggestions = [];
+    if (cartCategories.has('mates') && !cartCategories.has('bombillas')) {
+      const s =
+        products.find((p) => p.category === 'bombillas' && p.featured) ||
+        products.find((p) => p.category === 'bombillas');
+      if (s) suggestions.push(s);
+    }
+    if (cartCategories.has('mates') && !cartCategories.has('yerba')) {
+      const s =
+        products.find((p) => p.category === 'yerba' && p.featured) ||
+        products.find((p) => p.category === 'yerba');
+      if (s) suggestions.push(s);
+    }
+    return suggestions.slice(0, 2);
+  })();
 
   if (cart.length === 0) {
     return (
@@ -165,10 +187,10 @@ export const Cart = () => {
                       {/* Price */}
                       <div className="text-right">
                         <p className="text-2xl font-bold text-[#F5C080]">
-                          ${(item.price * item.quantity).toLocaleString()}
+                          ${(item.price * item.quantity).toLocaleString('es-AR')}
                         </p>
                         <p className="text-xs text-white/50">
-                          ${item.price.toLocaleString()} c/u
+                          ${item.price.toLocaleString('es-AR')} c/u
                         </p>
                       </div>
                     </div>
@@ -176,6 +198,56 @@ export const Cart = () => {
                 </div>
               </motion.div>
             ))}
+
+            {/* Upsell: completá tu kit */}
+            {upsellSuggestions.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: cart.length * 0.1 + 0.1 }}
+                className="bg-gradient-to-br from-[#F5C080]/10 to-[#C4351A]/10 backdrop-blur-sm rounded-2xl p-5 border border-[#F5C080]/30"
+              >
+                <p className="text-[#F5C080] font-semibold mb-4 flex items-center gap-2">
+                  🧉 ¿Completá tu kit matero?
+                </p>
+                <div className="space-y-3">
+                  {upsellSuggestions.map((product) => (
+                    <div key={product.id} className="flex items-center gap-3">
+                      <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#1a0a0a] flex-shrink-0">
+                        <img
+                          src={resolveImageUrl(product.images[0])}
+                          alt={product.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <Link to={`/product/${product.id}`}>
+                          <p className="text-white text-sm font-medium truncate hover:text-[#F5C080] transition-colors">
+                            {product.name}
+                          </p>
+                        </Link>
+                        <p className="text-[#F5C080] text-sm font-bold">
+                          ${product.price.toLocaleString('es-AR')}
+                        </p>
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => {
+                          addToCart(product);
+                          toast.success(`${product.name} agregado al carrito`, {
+                            icon: '🧉',
+                          });
+                        }}
+                        className="bg-[#F5C080] hover:bg-[#D07030] text-[#7B1F0F] px-3 py-2 rounded-lg text-sm font-semibold transition-colors flex-shrink-0"
+                      >
+                        + Agregar
+                      </motion.button>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
 
             {/* Clear Cart Button */}
             <motion.button
@@ -204,7 +276,7 @@ export const Cart = () => {
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-white/70">
                   <span>Subtotal</span>
-                  <span>${getCartTotal().toLocaleString()}</span>
+                  <span>${getCartTotal().toLocaleString('es-AR')}</span>
                 </div>
                 <div className="flex justify-between text-white/70">
                   <span>Envío</span>
@@ -216,7 +288,7 @@ export const Cart = () => {
                       Total
                     </span>
                     <span className="text-3xl font-bold text-[#F5C080]">
-                      ${getCartTotal().toLocaleString()}
+                      ${getCartTotal().toLocaleString('es-AR')}
                     </span>
                   </div>
                 </div>
