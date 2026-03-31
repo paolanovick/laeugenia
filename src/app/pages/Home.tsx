@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
+import { InfiniteCarousel } from '../components/InfiniteCarousel';
+import { CategoryCarousel } from '../components/CategoryCarousel';
 import { PromoBanner } from '../components/PromoBanner';
-import { ProductCard } from '../components/ProductCard';
 import { useProducts } from '../contexts/ProductsContext';
 import { categories } from '../data/products';
 
@@ -28,13 +29,7 @@ export const Home = () => {
               <div className="h-px w-16 bg-gradient-to-r from-transparent via-[#c8945a] to-transparent mx-auto mt-4" />
             </motion.div>
           </div>
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {featuredProducts.map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
-              ))}
-            </div>
-          </div>
+          <InfiniteCarousel products={featuredProducts} />
         </section>
       )}
 
@@ -86,11 +81,7 @@ export const Home = () => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {categoryProducts.map((product, index) => (
-                  <ProductCard key={product.id} product={product} index={index} />
-                ))}
-              </div>
+              <CategoryCarousel products={categoryProducts} category={category.id} />
             </motion.div>
           );
         })}
