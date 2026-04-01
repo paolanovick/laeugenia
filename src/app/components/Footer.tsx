@@ -19,23 +19,42 @@ export const Footer = () => {
     <footer className="bg-gradient-to-b from-[#7B1F0F] to-[#0e0b08] text-white mt-28">
       {/* Editorial tagline */}
       <div className="relative border-b border-[#c8945a]/20 py-14 px-4 text-center overflow-hidden">
-        {/* Water ripple rings */}
-        {[0, 0.8, 1.6, 2.4, 3.2].map((delay, i) => (
+        {/* Floating bubbles */}
+        {[
+          { left: '8%',  size: 6,  duration: 4.2, delay: 0,   drift: 18 },
+          { left: '15%', size: 4,  duration: 3.6, delay: 0.7, drift: -12 },
+          { left: '24%', size: 8,  duration: 5.1, delay: 1.4, drift: 20 },
+          { left: '33%', size: 3,  duration: 3.9, delay: 0.3, drift: -8 },
+          { left: '42%', size: 5,  duration: 4.5, delay: 2.1, drift: 14 },
+          { left: '51%', size: 7,  duration: 3.8, delay: 0.9, drift: -18 },
+          { left: '60%', size: 4,  duration: 5.3, delay: 1.7, drift: 10 },
+          { left: '69%', size: 9,  duration: 4.0, delay: 0.5, drift: -22 },
+          { left: '78%', size: 5,  duration: 4.7, delay: 2.4, drift: 16 },
+          { left: '87%', size: 3,  duration: 3.5, delay: 1.1, drift: -10 },
+          { left: '93%', size: 6,  duration: 4.9, delay: 0.2, drift: 12 },
+        ].map((p, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full border border-[#c8945a]/25 pointer-events-none"
-            style={{ top: '50%', left: '50%', x: '-50%', y: '-50%' }}
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              left: p.left,
+              bottom: '-10px',
+              width: p.size,
+              height: p.size,
+              background: `radial-gradient(circle at 35% 35%, #f5d9a8, #c8945a)`,
+            }}
             animate={{
-              width: ['80px', '900px'],
-              height: ['80px', '900px'],
-              opacity: [0.6, 0],
+              y: [0, -(160 + p.size * 8)],
+              x: [0, p.drift, 0, -p.drift / 2, 0],
+              opacity: [0, 0.7, 0.5, 0.2, 0],
+              scale: [0.6, 1, 1.1, 0.9, 0.4],
             }}
             transition={{
-              duration: 4,
-              delay,
+              duration: p.duration,
+              delay: p.delay,
               repeat: Infinity,
-              repeatDelay: 0,
-              ease: 'easeOut',
+              repeatDelay: 1.5 + i * 0.3,
+              ease: 'easeInOut',
             }}
           />
         ))}
