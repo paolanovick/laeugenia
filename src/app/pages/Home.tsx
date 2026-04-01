@@ -6,10 +6,12 @@ import { PromoBanner } from '../components/PromoBanner';
 import { useProducts } from '../contexts/ProductsContext';
 import { getCategories } from '../data/products';
 import { useCategories } from '../contexts/CategoriesContext';
+import { usePageConfig } from '../contexts/PageConfigContext';
 
 export const Home = () => {
   const { products } = useProducts();
   const { visibleCategories: categories } = useCategories();
+  const { config } = usePageConfig();
   const featuredProducts = products.filter((p) => p.featured);
 
   return (
@@ -121,7 +123,7 @@ export const Home = () => {
               Consultanos por WhatsApp y hacé tu pedido. Envíos a todo el país.
             </p>
             <a
-              href="https://wa.me/5491135811888?text=Hola!%20Quiero%20consultar%20por%20productos"
+              href={`https://wa.me/${config.whatsappNumber || '5491135811888'}?text=Hola!%20Quiero%20consultar%20por%20productos`}
               target="_blank"
               rel="noopener noreferrer"
               className="relative inline-flex items-center gap-3 overflow-hidden border-2 border-[#25D366] text-[#25D366] px-8 py-4 rounded-full font-semibold text-base tracking-wide group"
