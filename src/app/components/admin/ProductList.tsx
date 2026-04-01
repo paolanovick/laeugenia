@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Product } from '../../data/products';
+import { Product, getCategories } from '../../data/products';
 import { resolveImageUrl } from '../../utils/image';
 
 const TABS = [
@@ -9,6 +9,7 @@ const TABS = [
   { id: 'bombillas', label: '✨ Bombillas' },
   { id: 'articulos', label: '🪔 Artículos Materos' },
   { id: 'combos', label: '🎁 Combos y Regalos' },
+  { id: 'publicidad', label: '📢 Publicidad' },
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -17,6 +18,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   bombillas: '✨ Bombillas',
   articulos: '🪔 Artículos Materos',
   combos: '🎁 Combos y Regalos',
+  publicidad: '📢 Publicidad',
 };
 
 interface Props {
@@ -30,7 +32,7 @@ export const ProductList = ({ products, onEdit, onDelete }: Props) => {
 
   const filtered = activeTab === 'todos'
     ? products
-    : products.filter((p) => p.category === activeTab);
+    : products.filter((p) => getCategories(p).includes(activeTab));
 
   return (
     <div>
@@ -39,7 +41,7 @@ export const ProductList = ({ products, onEdit, onDelete }: Props) => {
         {TABS.map((tab) => {
           const count = tab.id === 'todos'
             ? products.length
-            : products.filter((p) => p.category === tab.id).length;
+            : products.filter((p) => getCategories(p).includes(tab.id)).length;
           return (
             <button
               key={tab.id}
@@ -94,7 +96,7 @@ export const ProductList = ({ products, onEdit, onDelete }: Props) => {
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-400 mb-1">{CATEGORY_LABELS[product.category]}</p>
+                <p className="text-xs text-gray-400 mb-1">{getCategories(product).map((c) => CATEGORY_LABELS[c]).filter(Boolean).join(' · ')}</p>
                 <p className="text-lg font-bold text-[#7B1F0F]">${product.price.toLocaleString()}</p>
               </div>
 

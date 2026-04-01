@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Product } from '../../data/products';
+import { Product, getCategories } from '../../data/products';
 import { resolveImageUrl } from '../../utils/image';
 
 const IMGBB_API_KEY = 'bcfd40d0312af92c9abc93c02e2a0d82';
@@ -36,7 +36,7 @@ interface Props {
 
 const emptyForm: ProductFormData = {
   name: '',
-  category: 'mates',
+  category: ['mates'],
   price: 0,
   images: [''],
   description: '',
@@ -57,7 +57,7 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
     if (editing) {
       setForm({
         name: editing.name,
-        category: editing.category,
+        category: getCategories(editing),
         price: editing.price,
         images: editing.images,
         description: editing.description,
@@ -189,20 +189,27 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
       <div>
         <label className="block text-sm font-semibold text-[#C4351A] mb-2">Categoría</label>
         <div className="flex gap-2 flex-wrap">
-          {CATEGORIAS.map((cat) => (
-            <button
-              type="button"
-              key={cat.id}
-              onClick={() => setForm((prev) => ({ ...prev, category: cat.id as Product['category'] }))}
-              className={`px-4 py-2 rounded-lg border text-sm font-medium transition ${
-                form.category === cat.id
-                  ? 'bg-[#7B1F0F] text-white border-[#7B1F0F]'
-                  : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {CATEGORIAS.map((cat) => {
+            const selected = (form.category as string[]).includes(cat.id);
+            return (
+              <button
+                type="button"
+                key={cat.id}
+                onClick={() => setForm((prev) => {
+                  const cats = prev.category as string[];
+                  if (selected && cats.length === 1) return prev;
+                  return { ...prev, category: selected ? cats.filter((c) => c !== cat.id) : [...cats, cat.id] };
+                })}
+                className={`px-4 py-2 rounded-lg border text-sm font-medium transition ${
+                  selected
+                    ? 'bg-[#7B1F0F] text-white border-[#7B1F0F]'
+                    : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 

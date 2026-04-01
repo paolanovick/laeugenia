@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { useCategories } from '../contexts/CategoriesContext';
 import { useProducts } from '../contexts/ProductsContext';
+import { getCategories } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 
 const categoryDescriptions: Record<string, string> = {
@@ -19,7 +20,7 @@ export const Category = () => {
   const { products } = useProducts();
   const { categories } = useCategories();
   const category = categories.find((c) => c.id === categoryId);
-  const categoryProducts = products.filter((p) => p.category === categoryId);
+  const categoryProducts = products.filter((p) => getCategories(p).includes(categoryId!));
 
   if (!category) {
     return (

@@ -1,12 +1,17 @@
 export interface Product {
   id: string;
   name: string;
-  category: 'mates' | 'yerba' | 'bombillas' | 'articulos' | 'combos' | 'publicidad';
+  category: string | string[];
   price: number;
   images: string[];
   description: string;
   featured: boolean;
   specs: { label: string; value: string }[];
+}
+
+// Helper para normalizar category (puede ser string legacy o string[])
+export function getCategories(product: Pick<Product, 'category'>): string[] {
+  return Array.isArray(product.category) ? product.category : [product.category];
 }
 
 export const products: Product[] = [

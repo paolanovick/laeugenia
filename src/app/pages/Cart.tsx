@@ -5,6 +5,7 @@ import { resolveImageUrl } from '../utils/image';
 import { useCart } from '../contexts/CartContext';
 import { usePageConfig } from '../contexts/PageConfigContext';
 import { useProducts } from '../contexts/ProductsContext';
+import { getCategories } from '../data/products';
 import { toast } from 'sonner';
 
 export const Cart = () => {
@@ -34,19 +35,19 @@ export const Cart = () => {
   };
 
   // Lógica de upsell: sugiere productos complementarios según lo que hay en el carrito
-  const cartCategories = new Set(cart.map((item) => item.category));
+  const cartCategories = new Set(cart.flatMap((item) => getCategories(item)));
   const upsellSuggestions = (() => {
     const suggestions = [];
     if (cartCategories.has('mates') && !cartCategories.has('bombillas')) {
       const s =
-        products.find((p) => p.category === 'bombillas' && p.featured) ||
-        products.find((p) => p.category === 'bombillas');
+        products.find((p) => getCategories(p).includes('bombillas') && p.featured) ||
+        products.find((p) => getCategories(p).includes('bombillas'));
       if (s) suggestions.push(s);
     }
     if (cartCategories.has('mates') && !cartCategories.has('yerba')) {
       const s =
-        products.find((p) => p.category === 'yerba' && p.featured) ||
-        products.find((p) => p.category === 'yerba');
+        products.find((p) => getCategories(p).includes('yerba') && p.featured) ||
+        products.find((p) => getCategories(p).includes('yerba'));
       if (s) suggestions.push(s);
     }
     return suggestions.slice(0, 2);

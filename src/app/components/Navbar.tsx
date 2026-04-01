@@ -6,6 +6,7 @@ import { useCart } from '../contexts/CartContext';
 import { useEntry } from '../contexts/EntryContext';
 import { useProducts } from '../contexts/ProductsContext';
 import { useCategories } from '../contexts/CategoriesContext';
+import { getCategories } from '../data/products';
 import { resolveImageUrl } from '../utils/image';
 
 export const Navbar = () => {
@@ -185,11 +186,11 @@ export const Navbar = () => {
                             </p>
                           </div>
                           <span className="text-xl">
-                            {product.category === 'mates' && '🧉'}
-                            {product.category === 'yerba' && '🌿'}
-                            {product.category === 'bombillas' && '✨'}
-                            {product.category === 'articulos' && '🪔'}
-                            {product.category === 'combos' && '🎁'}
+                            {(() => {
+                              const cats = getCategories(product).filter((c) => c !== 'publicidad');
+                              const icons: Record<string, string> = { mates: '🧉', yerba: '🌿', bombillas: '✨', articulos: '🪔', combos: '🎁' };
+                              return icons[cats[0]] ?? null;
+                            })()}
                           </span>
                         </motion.div>
                       </Link>

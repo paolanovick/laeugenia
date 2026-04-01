@@ -4,6 +4,7 @@ import { InfiniteCarousel } from '../components/InfiniteCarousel';
 import { CategoryCarousel } from '../components/CategoryCarousel';
 import { PromoBanner } from '../components/PromoBanner';
 import { useProducts } from '../contexts/ProductsContext';
+import { getCategories } from '../data/products';
 import { useCategories } from '../contexts/CategoriesContext';
 
 export const Home = () => {
@@ -41,7 +42,7 @@ export const Home = () => {
       <section id="categorias" className="max-w-7xl mx-auto px-4 pb-28">
         {categories.map((category, categoryIndex) => {
           const categoryProducts = products.filter(
-            (p) => p.category === category.id
+            (p) => getCategories(p).includes(category.id)
           );
 
           if (categoryProducts.length === 0) return null;

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { getCategories } from '../data/products';
 import { useParams, Link } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -49,8 +50,9 @@ export const ProductDetail = () => {
     );
   }
 
+  const productCats = getCategories(product).filter((c) => c !== 'publicidad');
   const relatedProducts = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
+    .filter((p) => p.id !== product.id && getCategories(p).some((c) => productCats.includes(c)))
     .slice(0, 4);
 
   const handleAddToCart = () => {
@@ -179,11 +181,10 @@ export const ProductDetail = () => {
           >
             <div>
               <div className="inline-block px-3 py-1 bg-[#C4351A]/30 border border-[#C4351A] rounded-full text-sm text-white/80 mb-4">
-                {product.category === 'mates' && '🧉 Mates'}
-                {product.category === 'yerba' && '🌿 Yerba & Blends'}
-                {product.category === 'bombillas' && '✨ Bombillas'}
-                {product.category === 'articulos' && '🪔 Artículos Materos'}
-                {product.category === 'combos' && '🎁 Combos y Regalos'}
+                {(() => {
+                  const labels: Record<string, string> = { mates: '🧉 Mates', yerba: '🌿 Yerba & Blends', bombillas: '✨ Bombillas', articulos: '🪔 Artículos Materos', combos: '🎁 Combos y Regalos' };
+                  return getCategories(product).filter((c) => c !== 'publicidad').map((c) => labels[c]).filter(Boolean).join(' · ');
+                })()}
               </div>
 
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">

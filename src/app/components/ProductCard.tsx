@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { ShoppingCart, Eye } from 'lucide-react';
 import { Link } from 'react-router';
-import { Product } from '../data/products';
+import { Product, getCategories } from '../data/products';
 import { useCart } from '../contexts/CartContext';
 import { toast } from 'sonner';
 import { resolveImageUrl } from '../utils/image';
@@ -105,11 +105,11 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
                 transition={{ repeat: Infinity, duration: 2, delay: index * 0.2 }}
                 className="text-3xl opacity-50 group-hover:opacity-100 transition-opacity"
               >
-                {product.category === 'mates' && '🧉'}
-                {product.category === 'yerba' && '🌿'}
-                {product.category === 'bombillas' && '✨'}
-                {product.category === 'articulos' && '🪔'}
-                {product.category === 'combos' && '🎁'}
+                {(() => {
+                  const cats = getCategories(product).filter((c) => c !== 'publicidad');
+                  const icons: Record<string, string> = { mates: '🧉', yerba: '🌿', bombillas: '✨', articulos: '🪔', combos: '🎁' };
+                  return icons[cats[0]] ?? null;
+                })()}
               </motion.div>
             </div>
           </div>
