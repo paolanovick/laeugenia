@@ -2,16 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import { usePageConfig, PageConfig } from '../../contexts/PageConfigContext';
 import { resolveImageUrl } from '../../utils/image';
 
-const IMGBB_API_KEY = 'bcfd40d0312af92c9abc93c02e2a0d82';
-
-async function uploadToImgBB(file: File): Promise<string> {
-  const formData = new FormData();
-  formData.append('image', file);
-  formData.append('key', IMGBB_API_KEY);
-  const res = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: formData });
-  const data = await res.json();
-  if (!data.success) throw new Error('Error al subir imagen');
-  return data.data.url;
+async function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 export const PageEditor = () => {
@@ -50,7 +47,7 @@ export const PageEditor = () => {
   const handlePromoUpload = async (file: File) => {
     setUploading(true);
     try {
-      const url = await uploadToImgBB(file);
+      const url = await fileToBase64(file);
       setForm((prev) => ({ ...prev, promoImage: url }));
     } catch {
       alert('Error al subir imagen');
