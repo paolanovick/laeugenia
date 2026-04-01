@@ -208,10 +208,10 @@ export const PageEditor = () => {
               type="text"
               value={form.bannerCtaLink}
               onChange={(e) => setForm((prev) => ({ ...prev, bannerCtaLink: e.target.value }))}
-              placeholder="/category/combos"
+              placeholder="/category/publicidad"
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
             />
-            <p className="text-xs text-gray-400 mt-1">Interno: /category/combos — Externo: https://...</p>
+            <p className="text-xs text-gray-400 mt-1">Interno: /category/publicidad — Externo: https://...</p>
           </div>
         </div>
 
