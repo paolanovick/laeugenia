@@ -39,7 +39,7 @@ const DEFAULT_CONFIG: PageConfig = {
   bannerEmoji: '🎁',
   bannerTitle: '',
   bannerSubtitle: '',
-  bannerCtaText: 'Ver productos',
+  bannerCtaText: 'banner-ofertas',
   bannerCtaLink: '/category/publicidad',
   bannerColor: 'red',
 };
