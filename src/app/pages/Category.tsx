@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
 import { useCategories } from '../contexts/CategoriesContext';
 import { useProducts } from '../contexts/ProductsContext';
+import { usePageConfig } from '../contexts/PageConfigContext';
 import { getCategories } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
 
@@ -19,6 +20,7 @@ export const Category = () => {
   const { categoryId } = useParams();
   const { products } = useProducts();
   const { categories } = useCategories();
+  const { config } = usePageConfig();
   const category = categories.find((c) => c.id === categoryId);
   const categoryProducts = products.filter((p) => getCategories(p).includes(categoryId!));
 
@@ -59,7 +61,7 @@ export const Category = () => {
           <div className="flex items-end gap-4 mb-3">
             <span className="text-5xl leading-none">{category.icon}</span>
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-white leading-none">
-              {category.name}
+              {categoryId === 'publicidad' && config.bannerTitle ? config.bannerTitle : category.name}
             </h1>
           </div>
           <div className="h-px w-16 bg-gradient-to-r from-[#c8945a] to-transparent mb-4" />
