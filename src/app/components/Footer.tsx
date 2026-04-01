@@ -18,16 +18,33 @@ export const Footer = () => {
   return (
     <footer className="bg-gradient-to-b from-[#7B1F0F] to-[#0e0b08] text-white mt-28">
       {/* Editorial tagline */}
-      <div className="border-b border-[#c8945a]/20 py-14 px-4 text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="font-serif text-4xl md:text-6xl text-white/90 font-normal italic tracking-tight"
-        >
-          "Te proponemos una experiencia que toca el alma dejando huellas..."
-        </motion.p>
+      <div className="border-b border-[#c8945a]/20 py-14 px-4 text-center overflow-hidden">
+        <p className="font-serif text-4xl md:text-6xl font-normal italic tracking-tight leading-snug">
+          {'"Te proponemos una experiencia que toca el alma dejando huellas..."'.split(' ').map((word, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07, duration: 0.5, ease: 'easeOut' }}
+              className="inline-block mr-[0.3em]"
+            >
+              <motion.span
+                style={{
+                  backgroundImage: 'linear-gradient(90deg, rgba(255,249,240,0.85) 0%, #c8945a 50%, rgba(255,249,240,0.85) 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  backgroundSize: '200% 100%',
+                }}
+                animate={{ backgroundPosition: ['100% 0%', '-100% 0%'] }}
+                transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 3, ease: 'easeInOut', delay: i * 0.04 }}
+              >
+                {word}
+              </motion.span>
+            </motion.span>
+          ))}
+        </p>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
