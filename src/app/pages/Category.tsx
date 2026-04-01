@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
-import { categories } from '../data/products';
+import { useCategories } from '../contexts/CategoriesContext';
 import { useProducts } from '../contexts/ProductsContext';
 import { ProductCard } from '../components/ProductCard';
 
@@ -11,11 +11,13 @@ const categoryDescriptions: Record<string, string> = {
   bombillas: 'Encontrá la bombilla perfecta entre nuestra selección de alpaca y acero inoxidable.',
   articulos: 'Todo lo que necesitás para disfrutar tu mate al máximo.',
   combos: 'Combos armados y regalos especiales para los amantes del mate.',
+  publicidad: 'Ofertas y productos especiales por tiempo limitado.',
 };
 
 export const Category = () => {
   const { categoryId } = useParams();
   const { products } = useProducts();
+  const { categories } = useCategories();
   const category = categories.find((c) => c.id === categoryId);
   const categoryProducts = products.filter((p) => p.category === categoryId);
 
