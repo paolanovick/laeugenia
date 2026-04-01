@@ -47,8 +47,15 @@ export const PageEditor = () => {
   const handlePromoUpload = async (file: File) => {
     setUploading(true);
     try {
-      const url = await fileToBase64(file);
-      setForm((prev) => ({ ...prev, promoImage: url }));
+      const base64 = await fileToBase64(file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: base64 }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Error al subir');
+      setForm((prev) => ({ ...prev, promoImage: json.url }));
     } catch {
       alert('Error al subir imagen');
     } finally {

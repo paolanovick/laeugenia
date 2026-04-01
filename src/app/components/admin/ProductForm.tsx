@@ -91,10 +91,17 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
     updatedUploading[index] = true;
     setUploading(updatedUploading);
     try {
-      const url = await fileToBase64(file);
-      handleImageChange(index, url);
+      const base64 = await fileToBase64(file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: base64 }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Error al subir');
+      handleImageChange(index, json.url);
     } catch {
-      alert('Error al procesar la imagen.');
+      alert('Error al subir la imagen.');
     } finally {
       updatedUploading[index] = false;
       setUploading([...updatedUploading]);
