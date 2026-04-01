@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useCart } from '../contexts/CartContext';
 import { useEntry } from '../contexts/EntryContext';
 import { useProducts } from '../contexts/ProductsContext';
-import { categories } from '../data/products';
+import { useCategories } from '../contexts/CategoriesContext';
 import { resolveImageUrl } from '../utils/image';
 
 export const Navbar = () => {
@@ -16,6 +16,7 @@ export const Navbar = () => {
   const { getCartCount } = useCart();
   const { reset } = useEntry();
   const { products } = useProducts();
+  const { visibleCategories } = useCategories();
   const cartCount = getCartCount();
   const prevCartCount = useRef(cartCount);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -272,7 +273,7 @@ export const Navbar = () => {
                   </p>
                 </div>
 
-                {categories.filter((c) => !c.hidden).map((category, index) => (
+                {visibleCategories.map((category, index) => (
                   <Link
                     key={category.id}
                     to={`/category/${category.id}`}

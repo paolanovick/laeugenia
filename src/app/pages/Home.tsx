@@ -4,10 +4,11 @@ import { InfiniteCarousel } from '../components/InfiniteCarousel';
 import { CategoryCarousel } from '../components/CategoryCarousel';
 import { PromoBanner } from '../components/PromoBanner';
 import { useProducts } from '../contexts/ProductsContext';
-import { categories } from '../data/products';
+import { useCategories } from '../contexts/CategoriesContext';
 
 export const Home = () => {
   const { products } = useProducts();
+  const { visibleCategories: categories } = useCategories();
   const featuredProducts = products.filter((p) => p.featured);
 
   return (
@@ -38,7 +39,7 @@ export const Home = () => {
 
       {/* Secciones por categoría */}
       <section id="categorias" className="max-w-7xl mx-auto px-4 pb-28">
-        {categories.filter((c) => !c.hidden).map((category, categoryIndex) => {
+        {categories.map((category, categoryIndex) => {
           const categoryProducts = products.filter(
             (p) => p.category === category.id
           );
