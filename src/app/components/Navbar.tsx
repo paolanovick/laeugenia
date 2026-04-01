@@ -272,7 +272,7 @@ export const Navbar = () => {
                   </p>
                 </div>
 
-                {categories.map((category, index) => (
+                {categories.filter((c) => !c.hidden).map((category, index) => (
                   <Link
                     key={category.id}
                     to={`/category/${category.id}`}

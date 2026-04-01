@@ -38,7 +38,7 @@ export const Home = () => {
 
       {/* Secciones por categoría */}
       <section id="categorias" className="max-w-7xl mx-auto px-4 pb-28">
-        {categories.map((category, categoryIndex) => {
+        {categories.filter((c) => !c.hidden).map((category, categoryIndex) => {
           const categoryProducts = products.filter(
             (p) => p.category === category.id
           );

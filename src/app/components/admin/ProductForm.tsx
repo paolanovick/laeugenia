@@ -23,6 +23,7 @@ const CATEGORIAS = [
   { id: 'bombillas', label: '✨ Bombillas' },
   { id: 'articulos', label: '🪔 Artículos Materos' },
   { id: 'combos', label: '🎁 Combos y Regalos' },
+  { id: 'publicidad', label: '📢 Publicidad' },
 ];
 
 type ProductFormData = Omit<Product, 'id'>;

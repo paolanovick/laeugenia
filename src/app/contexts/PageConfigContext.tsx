@@ -40,7 +40,7 @@ const DEFAULT_CONFIG: PageConfig = {
   bannerTitle: '',
   bannerSubtitle: '',
   bannerCtaText: 'Ver productos',
-  bannerCtaLink: '/',
+  bannerCtaLink: '/category/publicidad',
   bannerColor: 'red',
 };
 

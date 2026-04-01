@@ -1,7 +1,7 @@
 export interface Product {
   id: string;
   name: string;
-  category: 'mates' | 'yerba' | 'bombillas' | 'articulos' | 'combos';
+  category: 'mates' | 'yerba' | 'bombillas' | 'articulos' | 'combos' | 'publicidad';
   price: number;
   images: string[];
   description: string;
@@ -225,4 +225,5 @@ export const categories = [
   { id: 'bombillas', name: 'Bombillas', icon: '✨' },
   { id: 'articulos', name: 'Artículos Materos', icon: '🪔' },
   { id: 'combos', name: 'Combos y Regalos', icon: '🎁' },
+  { id: 'publicidad', name: 'Publicidad', icon: '📢', hidden: true },
 ];
