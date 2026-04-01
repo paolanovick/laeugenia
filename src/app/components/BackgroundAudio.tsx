@@ -3,8 +3,8 @@ import { motion } from 'motion/react';
 
 export const BackgroundAudio = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [muted, setMuted] = useState(true);
-  const [started, setStarted] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const unlockedRef = useRef(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -13,34 +13,37 @@ export const BackgroundAudio = () => {
     audio.volume = 0.25;
     audio.muted = true;
 
-    const tryPlay = () => {
-      audio.play()
-        .then(() => setStarted(true))
-        .catch(() => {});
+    // Intentar autoplay muted (siempre permitido)
+    audio.play().catch(() => {});
+
+    const unlock = () => {
+      if (unlockedRef.current) return;
+      unlockedRef.current = true;
+      audio.muted = false;
+      audio.play().catch(() => {});
+      ['click', 'scroll', 'touchstart', 'keydown'].forEach((e) =>
+        document.removeEventListener(e, unlock)
+      );
     };
 
-    tryPlay();
-
-    const unlockOnInteraction = () => {
-      if (!started) {
-        audio.play()
-          .then(() => setStarted(true))
-          .catch(() => {});
-      }
-      document.removeEventListener('click', unlockOnInteraction);
-    };
-    document.addEventListener('click', unlockOnInteraction);
+    ['click', 'scroll', 'touchstart', 'keydown'].forEach((e) =>
+      document.addEventListener(e, unlock, { once: false, passive: true })
+    );
 
     return () => {
-      document.removeEventListener('click', unlockOnInteraction);
+      ['click', 'scroll', 'touchstart', 'keydown'].forEach((e) =>
+        document.removeEventListener(e, unlock)
+      );
     };
-  }, [started]);
+  }, []);
 
   const toggle = () => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.muted = !muted;
-    setMuted(!muted);
+    const next = !muted;
+    audio.muted = next;
+    if (!next) audio.play().catch(() => {});
+    setMuted(next);
   };
 
   return (
