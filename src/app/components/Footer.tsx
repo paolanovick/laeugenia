@@ -18,7 +18,27 @@ export const Footer = () => {
   return (
     <footer className="bg-gradient-to-b from-[#7B1F0F] to-[#0e0b08] text-white mt-28">
       {/* Editorial tagline */}
-      <div className="border-b border-[#c8945a]/20 py-14 px-4 text-center overflow-hidden">
+      <div className="relative border-b border-[#c8945a]/20 py-14 px-4 text-center overflow-hidden">
+        {/* Water ripple rings */}
+        {[0, 0.8, 1.6, 2.4, 3.2].map((delay, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full border border-[#c8945a]/25 pointer-events-none"
+            style={{ top: '50%', left: '50%', x: '-50%', y: '-50%' }}
+            animate={{
+              width: ['80px', '900px'],
+              height: ['80px', '900px'],
+              opacity: [0.6, 0],
+            }}
+            transition={{
+              duration: 4,
+              delay,
+              repeat: Infinity,
+              repeatDelay: 0,
+              ease: 'easeOut',
+            }}
+          />
+        ))}
         <p className="font-serif text-4xl md:text-6xl font-normal italic tracking-tight leading-snug">
           {'"Te proponemos una experiencia que toca el alma dejando huellas..."'.split(' ').map((word, i) => (
             <motion.span
