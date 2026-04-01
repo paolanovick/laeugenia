@@ -26,7 +26,7 @@ export const Footer = () => {
           transition={{ duration: 0.8 }}
           className="font-serif text-4xl md:text-6xl text-white/90 font-normal italic tracking-tight"
         >
-          "Del monte a tu mesa."
+          "Te proponemos una experiencia que toca el alma y dejando huellas."
         </motion.p>
       </div>
 
