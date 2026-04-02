@@ -86,12 +86,12 @@ export const Category = () => {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="bg-white/10 text-white/70 text-xs border border-white/20 rounded-lg px-3 py-1.5 focus:outline-none focus:border-[#c8945a] cursor-pointer"
+              className="bg-[#2a0a0a] text-white text-xs border border-white/20 rounded-lg px-3 py-1.5 focus:outline-none focus:border-[#c8945a] cursor-pointer"
             >
-              <option value="default">Orden por defecto</option>
-              <option value="price-asc">Precio: menor a mayor</option>
-              <option value="price-desc">Precio: mayor a menor</option>
-              <option value="name-asc">Nombre A→Z</option>
+              <option value="default" className="bg-[#2a0a0a] text-white">Orden por defecto</option>
+              <option value="price-asc" className="bg-[#2a0a0a] text-white">Precio: menor a mayor</option>
+              <option value="price-desc" className="bg-[#2a0a0a] text-white">Precio: mayor a menor</option>
+              <option value="name-asc" className="bg-[#2a0a0a] text-white">Nombre A→Z</option>
             </select>
           </div>
         </motion.div>
