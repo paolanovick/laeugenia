@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Menu, X, LogOut, Package, LayoutDashboard } from 'lucide-react';
 import { Product } from '../data/products';
@@ -19,10 +19,13 @@ export const AdminPanel = () => {
   const [mensaje, setMensaje] = useState('');
 
   // Proteger ruta
-  if (!isAdminAuthenticated()) {
-    navigate('/admin');
-    return null;
-  }
+  useEffect(() => {
+    if (!isAdminAuthenticated()) {
+      navigate('/admin');
+    }
+  }, [navigate]);
+
+  if (!isAdminAuthenticated()) return null;
 
   const handleLogout = () => {
     adminLogout();

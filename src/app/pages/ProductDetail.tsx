@@ -163,7 +163,7 @@ export const ProductDetail = () => {
                     }`}
                   >
                     <img
-                      src={image}
+                      src={resolveImageUrl(image)}
                       alt={`${product.name} - ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
