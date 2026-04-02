@@ -7,11 +7,15 @@ export const PromoModal = () => {
   const { config, loading } = usePageConfig();
   const [visible, setVisible] = useState(false);
 
+  const PROMO_SESSION_KEY = 'eugenia_promo_shown';
+
   useEffect(() => {
     if (loading || !config.promoEnabled || !config.promoImage) return;
+    if (sessionStorage.getItem(PROMO_SESSION_KEY)) return;
 
     const t = setTimeout(() => {
       setVisible(true);
+      sessionStorage.setItem(PROMO_SESSION_KEY, '1');
       setTimeout(() => setVisible(false), 3000);
     }, 800);
 

@@ -146,11 +146,10 @@ export const Cart = () => {
                           </h3>
                         </Link>
                         <p className="text-white/50 text-sm">
-                          {item.category === 'mates' && '🧉 Mates'}
-                          {item.category === 'yerba' && '🌿 Yerba & Blends'}
-                          {item.category === 'bombillas' && '✨ Bombillas'}
-                          {item.category === 'articulos' && '🪔 Artículos Materos'}
-                          {item.category === 'combos' && '🎁 Combos y Regalos'}
+                          {(() => {
+                            const labels: Record<string, string> = { mates: '🧉 Mates', yerba: '🌿 Yerba & Blends', bombillas: '✨ Bombillas', articulos: '🪔 Artículos Materos', combos: '🎁 Combos y Regalos' };
+                            return getCategories(item).map((c) => labels[c]).filter(Boolean).join(' · ');
+                          })()}
                         </p>
                       </div>
                       <button
@@ -309,10 +308,12 @@ export const Cart = () => {
               </motion.button>
 
               <div className="space-y-2 text-sm text-white/60">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-[#F5C080] rounded-full" />
-                  {config.shippingText && <span>{config.shippingText}</span>}
-                </div>
+                {config.shippingText && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-[#F5C080] rounded-full" />
+                    <span>{config.shippingText}</span>
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-[#F5C080] rounded-full" />
                   <span>Pago seguro por WhatsApp</span>

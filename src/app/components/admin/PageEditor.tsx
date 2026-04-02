@@ -15,8 +15,10 @@ export const PageEditor = () => {
   const { config, saveConfig } = usePageConfig();
   const [form, setForm] = useState<PageConfig>({ ...config });
   const [uploading, setUploading] = useState(false);
+  const [uploadingHero, setUploadingHero] = useState(false);
   const [saved, setSaved] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const heroFileRef = useRef<HTMLInputElement>(null);
 
   // Sincronizar form cuando llega la config de la API
   useEffect(() => {
@@ -44,6 +46,25 @@ export const PageEditor = () => {
       tickerMessages: prev.tickerMessages.filter((_, idx) => idx !== i),
     }));
 
+  const handleHeroUpload = async (file: File) => {
+    setUploadingHero(true);
+    try {
+      const base64 = await fileToBase64(file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: base64 }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Error al subir');
+      setForm((prev) => ({ ...prev, heroImage: json.url }));
+    } catch {
+      alert('Error al subir imagen del hero');
+    } finally {
+      setUploadingHero(false);
+    }
+  };
+
   const handlePromoUpload = async (file: File) => {
     setUploading(true);
     try {
@@ -66,6 +87,52 @@ export const PageEditor = () => {
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold text-[#7B1F0F]">Edición de Página</h1>
+
+      {/* IMAGEN HERO */}
+      <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <h2 className="text-xl font-semibold text-[#7B1F0F] mb-2">🖼️ Imagen de portada (Hero)</h2>
+        <p className="text-sm text-gray-400 mb-4">Es la imagen de fondo que aparece al ingresar al sitio. Recomendado: horizontal, mínimo 1200px.</p>
+        <div className="flex gap-4 items-start">
+          <div className="flex-1 space-y-2">
+            <input
+              ref={heroFileRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) handleHeroUpload(f); }}
+            />
+            <button
+              onClick={() => heroFileRef.current?.click()}
+              disabled={uploadingHero}
+              className="w-full bg-[#7B1F0F] hover:bg-[#C4351A] disabled:opacity-50 text-white py-2 rounded-lg font-medium transition-colors"
+            >
+              {uploadingHero ? '⏳ Subiendo...' : '📁 Subir imagen de portada'}
+            </button>
+            <input
+              type="url"
+              value={form.heroImage}
+              onChange={(e) => setForm((prev) => ({ ...prev, heroImage: e.target.value }))}
+              placeholder="O pegá una URL..."
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A]"
+            />
+            {form.heroImage && (
+              <button
+                onClick={() => setForm((prev) => ({ ...prev, heroImage: '' }))}
+                className="w-full bg-red-50 hover:bg-red-100 text-red-500 border border-red-200 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                🗑️ Quitar imagen (vuelve a la imagen por defecto)
+              </button>
+            )}
+          </div>
+          {form.heroImage && (
+            <img
+              src={resolveImageUrl(form.heroImage)}
+              alt="Preview hero"
+              className="w-40 h-24 object-cover rounded-xl border border-gray-200 flex-shrink-0"
+            />
+          )}
+        </div>
+      </div>
 
       {/* TICKER */}
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">

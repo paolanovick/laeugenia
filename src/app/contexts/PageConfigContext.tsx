@@ -14,6 +14,7 @@ export interface PageConfig {
   bannerCtaText: string;
   bannerCtaLink: string;
   bannerColor: 'red' | 'green' | 'gold' | 'purple' | 'blue';
+  heroImage: string;
 }
 
 interface PageConfigContextType {
@@ -42,6 +43,7 @@ const DEFAULT_CONFIG: PageConfig = {
   bannerCtaText: 'banner-ofertas',
   bannerCtaLink: '/category/publicidad',
   bannerColor: 'red',
+  heroImage: '',
 };
 
 const API = '/api/config';

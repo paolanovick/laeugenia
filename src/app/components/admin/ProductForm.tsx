@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Product, getCategories } from '../../data/products';
 import { resolveImageUrl } from '../../utils/image';
+import { useCategories } from '../../contexts/CategoriesContext';
 
 async function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -10,15 +11,6 @@ async function fileToBase64(file: File): Promise<string> {
     reader.readAsDataURL(file);
   });
 }
-
-const CATEGORIAS = [
-  { id: 'mates', label: '🧉 Mates' },
-  { id: 'yerba', label: '🌿 Yerba & Blends' },
-  { id: 'bombillas', label: '✨ Bombillas' },
-  { id: 'articulos', label: '🪔 Artículos Materos' },
-  { id: 'combos', label: '🎁 Combos y Regalos' },
-  { id: 'publicidad', label: '📢 Publicidad' },
-];
 
 type ProductFormData = Omit<Product, 'id'>;
 
@@ -39,6 +31,7 @@ const emptyForm: ProductFormData = {
 };
 
 export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
+  const { categories } = useCategories();
   const [form, setForm] = useState<ProductFormData>(emptyForm);
   const [imageInputs, setImageInputs] = useState<string[]>(['']);
   const [uploading, setUploading] = useState<boolean[]>([false]);
@@ -190,7 +183,7 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
       <div>
         <label className="block text-sm font-semibold text-[#C4351A] mb-2">Categoría</label>
         <div className="flex gap-2 flex-wrap">
-          {CATEGORIAS.map((cat) => {
+          {categories.map((cat) => {
             const selected = (form.category as string[]).includes(cat.id);
             return (
               <button
@@ -207,7 +200,7 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
                     : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
                 }`}
               >
-                {cat.label}
+                {cat.icon} {cat.name}
               </button>
             );
           })}

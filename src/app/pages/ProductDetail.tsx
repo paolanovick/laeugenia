@@ -6,7 +6,6 @@ import {
   ShoppingCart,
   ArrowLeft,
   Check,
-  Star,
   Truck,
   Shield,
   Package,
@@ -191,18 +190,6 @@ export const ProductDetail = () => {
                 {product.name}
               </h1>
 
-              {/* Rating */}
-              <div className="flex items-center gap-2 mb-6">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-5 h-5 fill-[#F5C080] text-[#F5C080]"
-                    />
-                  ))}
-                </div>
-                <span className="text-white/60 text-sm">(128 reseñas)</span>
-              </div>
 
               {/* Price */}
               <div className="mb-8">

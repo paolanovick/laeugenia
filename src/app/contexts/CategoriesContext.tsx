@@ -11,6 +11,7 @@ export interface Category {
 interface CategoriesContextType {
   categories: Category[];
   visibleCategories: Category[];
+  saveCategory: (cat: Category) => Promise<void>;
 }
 
 const CategoriesContext = createContext<CategoriesContextType | undefined>(undefined);
@@ -30,10 +31,20 @@ export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       .catch(() => {});
   }, []);
 
+  const saveCategory = async (cat: Category) => {
+    const res = await fetch('/api/categories', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cat),
+    });
+    if (!res.ok) throw new Error('Error al guardar categoría');
+    setCategories((prev) => prev.map((c) => (c.id === cat.id ? cat : c)));
+  };
+
   const visibleCategories = categories.filter((c) => !c.hidden);
 
   return (
-    <CategoriesContext.Provider value={{ categories, visibleCategories }}>
+    <CategoriesContext.Provider value={{ categories, visibleCategories, saveCategory }}>
       {children}
     </CategoriesContext.Provider>
   );

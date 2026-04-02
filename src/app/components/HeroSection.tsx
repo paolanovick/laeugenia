@@ -1,12 +1,16 @@
 import { motion } from 'motion/react';
+import { usePageConfig } from '../contexts/PageConfigContext';
 
-const HERO_IMAGE = 'https://i.ibb.co/pjCr7n1q/imagen1.jpg';
+const FALLBACK_HERO = 'https://i.ibb.co/pjCr7n1q/imagen1.jpg';
 
 interface Props {
   onEnter: () => void;
 }
 
 export const HeroSection = ({ onEnter }: Props) => {
+  const { config } = usePageConfig();
+  const heroSrc = config.heroImage || FALLBACK_HERO;
+
   return (
     <section className="relative h-screen w-full overflow-hidden">
       {/* Imagen de fondo */}
@@ -17,7 +21,7 @@ export const HeroSection = ({ onEnter }: Props) => {
         className="absolute inset-0"
       >
         <img
-          src={HERO_IMAGE}
+          src={heroSrc}
           alt="La Eugenia & Flia. Mates"
           className="w-full h-full object-cover"
         />

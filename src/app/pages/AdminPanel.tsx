@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Menu, X, LogOut, Package, LayoutDashboard } from 'lucide-react';
+import { Menu, X, LogOut, Package, LayoutDashboard, Tag } from 'lucide-react';
 import { Product } from '../data/products';
 import { useProducts } from '../contexts/ProductsContext';
 import { ProductForm } from '../components/admin/ProductForm';
 import { ProductList } from '../components/admin/ProductList';
 import { PageEditor } from '../components/admin/PageEditor';
+import { CategoryEditor } from '../components/admin/CategoryEditor';
 import { adminLogout, isAdminAuthenticated } from './AdminLogin';
 
-type Seccion = 'productos' | 'pagina';
+type Seccion = 'productos' | 'pagina' | 'categorias';
 
 export const AdminPanel = () => {
   const navigate = useNavigate();
@@ -73,6 +74,7 @@ export const AdminPanel = () => {
 
   const navItems: { id: Seccion; label: string; icon: React.ReactNode }[] = [
     { id: 'productos', label: 'Productos', icon: <Package className="w-5 h-5" /> },
+    { id: 'categorias', label: 'Categorías', icon: <Tag className="w-5 h-5" /> },
     { id: 'pagina', label: 'Edición de Página', icon: <LayoutDashboard className="w-5 h-5" /> },
   ];
 
@@ -200,6 +202,7 @@ export const AdminPanel = () => {
           </div>
         )}
 
+        {seccion === 'categorias' && <CategoryEditor />}
         {seccion === 'pagina' && <PageEditor />}
       </main>
     </div>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router';
 import { motion } from 'motion/react';
 import { ArrowLeft } from 'lucide-react';
@@ -6,6 +7,8 @@ import { useProducts } from '../contexts/ProductsContext';
 import { usePageConfig } from '../contexts/PageConfigContext';
 import { getCategories } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
+
+type SortKey = 'default' | 'price-asc' | 'price-desc' | 'name-asc';
 
 const categoryDescriptions: Record<string, string> = {
   mates: 'Descubrí nuestra colección de mates artesanales, elaborados con materiales de primera calidad.',
@@ -21,8 +24,16 @@ export const Category = () => {
   const { products } = useProducts();
   const { categories } = useCategories();
   const { config } = usePageConfig();
+  const [sort, setSort] = useState<SortKey>('default');
   const category = categories.find((c) => c.id === categoryId);
-  const categoryProducts = products.filter((p) => getCategories(p).includes(categoryId!));
+
+  const rawProducts = products.filter((p) => getCategories(p).includes(categoryId!));
+  const categoryProducts = [...rawProducts].sort((a, b) => {
+    if (sort === 'price-asc') return a.price - b.price;
+    if (sort === 'price-desc') return b.price - a.price;
+    if (sort === 'name-asc') return a.name.localeCompare(b.name, 'es');
+    return 0;
+  });
 
   if (!category) {
     return (
@@ -68,9 +79,21 @@ export const Category = () => {
           <p className="text-white/50 text-sm font-light max-w-2xl">
             {categoryDescriptions[category.id]}
           </p>
-          <p className="text-white/30 text-xs tracking-widest uppercase mt-3">
-            {categoryProducts.length} {categoryProducts.length === 1 ? 'producto' : 'productos'}
-          </p>
+          <div className="flex items-center justify-between mt-3 flex-wrap gap-3">
+            <p className="text-white/30 text-xs tracking-widest uppercase">
+              {categoryProducts.length} {categoryProducts.length === 1 ? 'producto' : 'productos'}
+            </p>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortKey)}
+              className="bg-white/10 text-white/70 text-xs border border-white/20 rounded-lg px-3 py-1.5 focus:outline-none focus:border-[#c8945a] cursor-pointer"
+            >
+              <option value="default">Orden por defecto</option>
+              <option value="price-asc">Precio: menor a mayor</option>
+              <option value="price-desc">Precio: mayor a menor</option>
+              <option value="name-asc">Nombre A→Z</option>
+            </select>
+          </div>
         </motion.div>
 
         {/* Products — mismas tarjetas que el carrusel */}

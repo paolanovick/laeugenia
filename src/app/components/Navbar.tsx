@@ -40,14 +40,21 @@ export const Navbar = () => {
     }
   }, [searchOpen]);
 
+  const categoryLabels: Record<string, string> = { mates: 'Mates', yerba: 'Yerba & Blends', bombillas: 'Bombillas', articulos: 'Artículos Materos', combos: 'Combos y Regalos' };
   const searchResults =
     searchQuery.trim().length >= 2
       ? products
-          .filter(
-            (p) =>
-              p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              p.description.toLowerCase().includes(searchQuery.toLowerCase())
-          )
+          .filter((p) => {
+            const q = searchQuery.toLowerCase();
+            const catNames = getCategories(p).map((c) => categoryLabels[c] ?? '').join(' ');
+            const specs = p.specs.map((s) => `${s.label} ${s.value}`).join(' ');
+            return (
+              p.name.toLowerCase().includes(q) ||
+              p.description.toLowerCase().includes(q) ||
+              catNames.toLowerCase().includes(q) ||
+              specs.toLowerCase().includes(q)
+            );
+          })
           .slice(0, 5)
       : [];
 

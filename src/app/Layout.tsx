@@ -7,6 +7,7 @@ import { AnnouncementTicker } from './components/AnnouncementTicker';
 import { PromoModal } from './components/PromoModal';
 import { Toaster } from './components/ui/sonner';
 import { HeroSection } from './components/HeroSection';
+import { WhatsAppButton } from './components/WhatsAppButton';
 import { useEntry } from './contexts/EntryContext';
 
 const ScrollToTop = () => {
@@ -50,6 +51,7 @@ export const Layout = () => {
       <Toaster position="bottom-right" />
       <CookieBanner />
       <PromoModal />
+      <WhatsAppButton />
     </div>
   );
 };
