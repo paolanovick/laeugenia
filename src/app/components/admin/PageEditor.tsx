@@ -1,15 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { usePageConfig, PageConfig } from '../../contexts/PageConfigContext';
-import { resolveImageUrl } from '../../utils/image';
-
-async function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
+import { resolveImageUrl, compressImage } from '../../utils/image';
 
 export const PageEditor = () => {
   const { config, saveConfig } = usePageConfig();
@@ -49,7 +40,7 @@ export const PageEditor = () => {
   const handleHeroUpload = async (file: File) => {
     setUploadingHero(true);
     try {
-      const base64 = await fileToBase64(file);
+      const base64 = await compressImage(file);
       const res = await fetch('/api/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -68,7 +59,7 @@ export const PageEditor = () => {
   const handlePromoUpload = async (file: File) => {
     setUploading(true);
     try {
-      const base64 = await fileToBase64(file);
+      const base64 = await compressImage(file);
       const res = await fetch('/api/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

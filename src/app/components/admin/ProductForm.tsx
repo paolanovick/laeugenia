@@ -1,16 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Product, getCategories } from '../../data/products';
-import { resolveImageUrl } from '../../utils/image';
+import { resolveImageUrl, compressImage } from '../../utils/image';
 import { useCategories } from '../../contexts/CategoriesContext';
-
-async function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
 
 type ProductFormData = Omit<Product, 'id'>;
 
@@ -84,7 +75,7 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
     updatedUploading[index] = true;
     setUploading(updatedUploading);
     try {
-      const base64 = await fileToBase64(file);
+      const base64 = await compressImage(file);
       const res = await fetch('/api/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
