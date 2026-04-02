@@ -37,7 +37,7 @@ export const CategoryEditor = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-[#7B1F0F] mb-2">Categorías</h1>
-      <p className="text-sm text-gray-500 mb-6">Activá o desactivá categorías. Las ocultas no aparecen en el menú ni en la tienda.</p>
+      <p className="text-sm text-gray-500 mb-6">Activá o desactivá categorías. Las ocultas no aparecen en la página principal de la tienda.</p>
 
       {mensaje && (
         <div className="mb-4 bg-white border-2 border-[#C4351A] text-gray-800 px-4 py-2 rounded-xl text-sm font-medium">
