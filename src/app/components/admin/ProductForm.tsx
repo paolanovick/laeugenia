@@ -323,9 +323,10 @@ export const ProductForm = ({ onSubmit, onCancel, editing }: Props) => {
       <div className="flex gap-3 pt-2">
         <button
           type="submit"
-          className="bg-[#7B1F0F] hover:bg-[#C4351A] text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+          disabled={uploading.some(Boolean)}
+          className="bg-[#7B1F0F] hover:bg-[#C4351A] disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition-colors"
         >
-          Guardar
+          {uploading.some(Boolean) ? '⏳ Esperá que terminen las subidas...' : 'Guardar'}
         </button>
         {editing && (
           <button
