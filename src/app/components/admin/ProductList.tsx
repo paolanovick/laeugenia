@@ -1,25 +1,7 @@
 import { useState } from 'react';
 import { Product, getCategories } from '../../data/products';
 import { resolveImageUrl } from '../../utils/image';
-
-const TABS = [
-  { id: 'todos', label: '📋 Todos' },
-  { id: 'mates', label: '🧉 Mates' },
-  { id: 'yerba', label: '🌿 Yerba & Blends' },
-  { id: 'bombillas', label: '✨ Bombillas' },
-  { id: 'articulos', label: '🪔 Artículos Materos' },
-  { id: 'combos', label: '🎁 Combos y Regalos' },
-  { id: 'publicidad', label: '📢 Publicidad' },
-];
-
-const CATEGORY_LABELS: Record<string, string> = {
-  mates: '🧉 Mates',
-  yerba: '🌿 Yerba & Blends',
-  bombillas: '✨ Bombillas',
-  articulos: '🪔 Artículos Materos',
-  combos: '🎁 Combos y Regalos',
-  publicidad: '📢 Publicidad',
-};
+import { useCategories } from '../../contexts/CategoriesContext';
 
 interface Props {
   products: Product[];
@@ -28,7 +10,18 @@ interface Props {
 }
 
 export const ProductList = ({ products, onEdit, onDelete }: Props) => {
+  const { categories } = useCategories();
   const [activeTab, setActiveTab] = useState('todos');
+
+  const tabs = [
+    { id: 'todos', label: '📋 Todos' },
+    ...categories.sort((a, b) => a.order - b.order).map((c) => ({ id: c.id, label: `${c.icon} ${c.name}` })),
+  ];
+
+  const categoryLabel = (id: string) => {
+    const cat = categories.find((c) => c.id === id);
+    return cat ? `${cat.icon} ${cat.name}` : id;
+  };
 
   const filtered = activeTab === 'todos'
     ? products
@@ -38,7 +31,7 @@ export const ProductList = ({ products, onEdit, onDelete }: Props) => {
     <div>
       {/* Tabs */}
       <div className="flex gap-2 flex-wrap mb-4">
-        {TABS.map((tab) => {
+        {tabs.map((tab) => {
           const count = tab.id === 'todos'
             ? products.length
             : products.filter((p) => getCategories(p).includes(tab.id)).length;
@@ -96,7 +89,9 @@ export const ProductList = ({ products, onEdit, onDelete }: Props) => {
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-400 mb-1">{getCategories(product).map((c) => CATEGORY_LABELS[c]).filter(Boolean).join(' · ')}</p>
+                <p className="text-xs text-gray-400 mb-1">
+                  {getCategories(product).map(categoryLabel).join(' · ')}
+                </p>
                 <p className="text-lg font-bold text-[#7B1F0F]">${product.price.toLocaleString()}</p>
               </div>
 
