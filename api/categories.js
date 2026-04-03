@@ -1,12 +1,12 @@
 const { getDb } = require('./_mongodb');
 
 const DEFAULT_CATEGORIES = [
-  { id: 'mates', name: 'Mates', icon: '🧉', hidden: false },
-  { id: 'yerba', name: 'Yerba & Blends', icon: '🌿', hidden: false },
-  { id: 'bombillas', name: 'Bombillas', icon: '✨', hidden: false },
-  { id: 'articulos', name: 'Artículos Materos', icon: '🪔', hidden: false },
-  { id: 'combos', name: 'Combos y Regalos', icon: '🎁', hidden: false },
-  { id: 'publicidad', name: 'Publicidad', icon: '📢', hidden: true },
+  { id: 'mates', name: 'Mates', icon: '🧉', hidden: false, order: 0 },
+  { id: 'yerba', name: 'Yerba & Blends', icon: '🌿', hidden: false, order: 1 },
+  { id: 'bombillas', name: 'Bombillas', icon: '✨', hidden: false, order: 2 },
+  { id: 'articulos', name: 'Artículos Materos', icon: '🪔', hidden: false, order: 3 },
+  { id: 'combos', name: 'Combos y Regalos', icon: '🎁', hidden: false, order: 4 },
+  { id: 'publicidad', name: 'Publicidad', icon: '📢', hidden: true, order: 5 },
 ];
 
 module.exports = async function handler(req, res) {
@@ -20,7 +20,7 @@ module.exports = async function handler(req, res) {
     const col = db.collection('categories');
 
     if (req.method === 'GET') {
-      let categories = await col.find({}, { projection: { _id: 0 } }).toArray();
+      let categories = await col.find({}, { projection: { _id: 0 } }).sort({ order: 1 }).toArray();
       if (categories.length === 0) {
         await col.insertMany(DEFAULT_CATEGORIES);
         categories = DEFAULT_CATEGORIES;

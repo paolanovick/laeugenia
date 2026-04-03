@@ -6,6 +6,7 @@ export interface Category {
   name: string;
   icon: string;
   hidden: boolean;
+  order: number;
 }
 
 interface CategoriesContextType {
@@ -18,7 +19,7 @@ const CategoriesContext = createContext<CategoriesContextType | undefined>(undef
 
 export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [categories, setCategories] = useState<Category[]>(
-    fallbackCategories.map((c) => ({ ...c, hidden: (c as any).hidden ?? false }))
+    fallbackCategories.map((c, i) => ({ ...c, hidden: (c as any).hidden ?? false, order: i }))
   );
 
   useEffect(() => {
