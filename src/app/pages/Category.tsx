@@ -70,7 +70,7 @@ export const Category = () => {
           className="mb-10"
         >
           <div className="flex items-end gap-4 mb-3">
-            <span className="text-5xl leading-none">{category.icon}</span>
+            <span className="text-5xl leading-none">{categoryId === 'publicidad' && config.bannerEmoji ? config.bannerEmoji : category.icon}</span>
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-white leading-none">
               {categoryId === 'publicidad' && config.bannerTitle ? config.bannerTitle : category.name}
             </h1>
