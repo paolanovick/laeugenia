@@ -10,14 +10,6 @@ import { ProductCard } from '../components/ProductCard';
 
 type SortKey = 'default' | 'price-asc' | 'price-desc' | 'name-asc';
 
-const categoryDescriptions: Record<string, string> = {
-  mates: 'Descubrí nuestra colección de mates artesanales, elaborados con materiales de primera calidad.',
-  yerba: 'Explorá nuestros blends exclusivos y yerba mate premium seleccionada.',
-  bombillas: 'Encontrá la bombilla perfecta entre nuestra selección de alpaca y acero inoxidable.',
-  articulos: 'Todo lo que necesitás para disfrutar tu mate al máximo.',
-  combos: 'Combos armados y regalos especiales para los amantes del mate.',
-  publicidad: 'Ofertas y productos especiales por tiempo limitado.',
-};
 
 export const Category = () => {
   const { categoryId } = useParams();
@@ -77,7 +69,7 @@ export const Category = () => {
           </div>
           <div className="h-px w-16 bg-gradient-to-r from-[#c8945a] to-transparent mb-4" />
           <p className="text-white/50 text-sm font-light max-w-2xl">
-            {categoryDescriptions[category.id]}
+            {category.description}
           </p>
           <div className="flex items-center justify-between mt-3 flex-wrap gap-3">
             <p className="text-white/30 text-xs tracking-widest uppercase">

@@ -7,6 +7,7 @@ export interface Category {
   icon: string;
   hidden: boolean;
   order: number;
+  description: string;
 }
 
 interface CategoriesContextType {
@@ -19,7 +20,7 @@ const CategoriesContext = createContext<CategoriesContextType | undefined>(undef
 
 export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [categories, setCategories] = useState<Category[]>(
-    fallbackCategories.map((c, i) => ({ ...c, hidden: (c as any).hidden ?? false, order: i }))
+    fallbackCategories.map((c, i) => ({ ...c, hidden: (c as any).hidden ?? false, order: i, description: (c as any).description ?? '' }))
   );
 
   useEffect(() => {
@@ -39,7 +40,11 @@ export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       body: JSON.stringify(cat),
     });
     if (!res.ok) throw new Error('Error al guardar categoría');
-    setCategories((prev) => prev.map((c) => (c.id === cat.id ? cat : c)));
+    setCategories((prev) =>
+      prev.some((c) => c.id === cat.id)
+        ? prev.map((c) => (c.id === cat.id ? cat : c))
+        : [...prev, cat]
+    );
   };
 
   const visibleCategories = categories.filter((c) => !c.hidden);

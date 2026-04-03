@@ -5,7 +5,7 @@ export const CategoryEditor = () => {
   const { categories, saveCategory } = useCategories();
   const [saving, setSaving] = useState<string | null>(null);
   const [mensaje, setMensaje] = useState('');
-  const [newCat, setNewCat] = useState({ name: '', icon: '🆕', id: '' });
+  const [newCat, setNewCat] = useState({ name: '', icon: '🆕', id: '', description: '' });
   const [creando, setCreando] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
@@ -26,12 +26,12 @@ export const CategoryEditor = () => {
     }
   };
 
-  const handleIconChange = async (cat: Category, icon: string) => {
+  const handleFieldChange = async (cat: Category, field: Partial<Category>) => {
     setSaving(cat.id);
     try {
-      await saveCategory({ ...cat, icon });
+      await saveCategory({ ...cat, ...field });
     } catch {
-      showMensaje('❌ Error al guardar ícono');
+      showMensaje('❌ Error al guardar');
     } finally {
       setSaving(null);
     }
@@ -86,8 +86,9 @@ export const CategoryEditor = () => {
         icon: newCat.icon || '🆕',
         hidden: false,
         order: categories.length,
+        description: newCat.description.trim(),
       });
-      setNewCat({ name: '', icon: '🆕', id: '' });
+      setNewCat({ name: '', icon: '🆕', id: '', description: '' });
       setShowForm(false);
       showMensaje(`✅ Categoría "${newCat.name}" creada`);
     } catch {
@@ -149,6 +150,16 @@ export const CategoryEditor = () => {
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A] bg-white"
             />
           </div>
+          <div>
+            <label className="block text-xs text-gray-500 mb-1">Descripción (aparece debajo del título en la página de la categoría)</label>
+            <input
+              type="text"
+              value={newCat.description}
+              onChange={(e) => setNewCat((p) => ({ ...p, description: e.target.value }))}
+              placeholder="ej: Descubrí nuestra colección de termos premium."
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-800 focus:outline-none focus:border-[#C4351A] bg-white"
+            />
+          </div>
           <button
             onClick={handleCreate}
             disabled={creando}
@@ -164,55 +175,68 @@ export const CategoryEditor = () => {
         {sorted.map((cat, idx) => (
           <div
             key={cat.id}
-            className={`bg-white rounded-xl border p-4 flex items-center gap-3 transition ${
+            className={`bg-white rounded-xl border p-4 transition ${
               cat.hidden ? 'opacity-50 border-gray-100' : 'border-gray-200 shadow-sm'
             }`}
           >
-            {/* Flechas de orden */}
-            <div className="flex flex-col gap-0.5">
+            <div className="flex items-center gap-3">
+              {/* Flechas de orden */}
+              <div className="flex flex-col gap-0.5">
+                <button
+                  onClick={() => handleMoveUp(cat)}
+                  disabled={idx === 0 || saving === cat.id}
+                  className="text-gray-400 hover:text-[#7B1F0F] disabled:opacity-20 text-xs leading-none px-1"
+                >▲</button>
+                <button
+                  onClick={() => handleMoveDown(cat)}
+                  disabled={idx === sorted.length - 1 || saving === cat.id}
+                  className="text-gray-400 hover:text-[#7B1F0F] disabled:opacity-20 text-xs leading-none px-1"
+                >▼</button>
+              </div>
+
+              {/* Icono editable */}
+              <input
+                type="text"
+                value={cat.icon}
+                onChange={(e) => handleFieldChange(cat, { icon: e.target.value })}
+                className="w-12 text-2xl text-center border border-gray-200 rounded-lg p-1 focus:outline-none focus:border-[#C4351A]"
+                maxLength={4}
+              />
+
+              {/* Nombre */}
+              <div className="flex-1">
+                <p className="font-semibold text-gray-800">{cat.name}</p>
+                <p className="text-xs text-gray-400">ID: {cat.id}</p>
+              </div>
+
+              {/* Toggle visible/oculta */}
               <button
-                onClick={() => handleMoveUp(cat)}
-                disabled={idx === 0 || saving === cat.id}
-                className="text-gray-400 hover:text-[#7B1F0F] disabled:opacity-20 text-xs leading-none px-1"
+                onClick={() => handleToggle(cat)}
+                disabled={saving === cat.id}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition disabled:opacity-50 ${
+                  cat.hidden
+                    ? 'bg-green-50 hover:bg-green-100 text-green-700 border border-green-200'
+                    : 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200'
+                }`}
               >
-                ▲
-              </button>
-              <button
-                onClick={() => handleMoveDown(cat)}
-                disabled={idx === sorted.length - 1 || saving === cat.id}
-                className="text-gray-400 hover:text-[#7B1F0F] disabled:opacity-20 text-xs leading-none px-1"
-              >
-                ▼
+                {saving === cat.id ? '...' : cat.hidden ? '👁️ Mostrar' : '🚫 Ocultar'}
               </button>
             </div>
 
-            {/* Icono editable */}
-            <input
-              type="text"
-              value={cat.icon}
-              onChange={(e) => handleIconChange(cat, e.target.value)}
-              className="w-12 text-2xl text-center border border-gray-200 rounded-lg p-1 focus:outline-none focus:border-[#C4351A]"
-              maxLength={4}
-            />
-
-            {/* Nombre */}
-            <div className="flex-1">
-              <p className="font-semibold text-gray-800">{cat.name}</p>
-              <p className="text-xs text-gray-400">ID: {cat.id}</p>
+            {/* Descripción editable */}
+            <div className="mt-3 pl-10">
+              <input
+                type="text"
+                defaultValue={cat.description ?? ''}
+                onBlur={(e) => {
+                  if (e.target.value !== (cat.description ?? '')) {
+                    handleFieldChange(cat, { description: e.target.value });
+                  }
+                }}
+                placeholder="Descripción de la categoría (aparece en la página de la categoría)..."
+                className="w-full px-3 py-1.5 border border-gray-100 rounded-lg text-sm text-gray-600 focus:outline-none focus:border-[#C4351A] bg-gray-50"
+              />
             </div>
-
-            {/* Toggle visible/oculta */}
-            <button
-              onClick={() => handleToggle(cat)}
-              disabled={saving === cat.id}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition disabled:opacity-50 ${
-                cat.hidden
-                  ? 'bg-green-50 hover:bg-green-100 text-green-700 border border-green-200'
-                  : 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200'
-              }`}
-            >
-              {saving === cat.id ? '...' : cat.hidden ? '👁️ Mostrar' : '🚫 Ocultar'}
-            </button>
           </div>
         ))}
       </div>
