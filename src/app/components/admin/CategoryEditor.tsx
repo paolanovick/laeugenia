@@ -30,6 +30,7 @@ export const CategoryEditor = () => {
     setSaving(cat.id);
     try {
       await saveCategory({ ...cat, ...field });
+      showMensaje('✅ Cambio guardado');
     } catch {
       showMensaje('❌ Error al guardar');
     } finally {
@@ -204,8 +205,17 @@ export const CategoryEditor = () => {
               />
 
               {/* Nombre */}
-              <div className="flex-1">
-                <p className="font-semibold text-gray-800">{cat.name}</p>
+              <div className="flex-1 min-w-0">
+                <input
+                  type="text"
+                  defaultValue={cat.name}
+                  onBlur={(e) => {
+                    if (e.target.value.trim() && e.target.value.trim() !== cat.name) {
+                      handleFieldChange(cat, { name: e.target.value.trim() });
+                    }
+                  }}
+                  className="font-semibold text-gray-800 w-full border-b border-transparent hover:border-gray-300 focus:border-[#C4351A] focus:outline-none bg-transparent text-sm"
+                />
                 <p className="text-xs text-gray-400">ID: {cat.id}</p>
               </div>
 
@@ -229,7 +239,7 @@ export const CategoryEditor = () => {
                 type="text"
                 defaultValue={cat.description ?? ''}
                 onBlur={(e) => {
-                  if (e.target.value !== (cat.description ?? '')) {
+                  if (e.target.value !== cat.description) {
                     handleFieldChange(cat, { description: e.target.value });
                   }
                 }}
