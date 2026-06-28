@@ -6,6 +6,7 @@ import { useCart } from '../contexts/CartContext';
 import { useEntry } from '../contexts/EntryContext';
 import { useProducts } from '../contexts/ProductsContext';
 import { useCategories } from '../contexts/CategoriesContext';
+import { useCartAnimation } from '../contexts/CartAnimationContext';
 import { getCategories } from '../data/products';
 import { resolveImageUrl } from '../utils/image';
 
@@ -15,6 +16,7 @@ export const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [cartBounced, setCartBounced] = useState(false);
   const { getCartCount } = useCart();
+  const { registerCartTarget } = useCartAnimation();
   const { reset } = useEntry();
   const { products } = useProducts();
   const { visibleCategories } = useCategories();
@@ -115,6 +117,7 @@ export const Navbar = () => {
               {/* Cart Button */}
               <Link to="/cart">
                 <motion.div
+                  ref={registerCartTarget}
                   animate={
                     cartBounced
                       ? { scale: [1, 1.35, 0.85, 1.1, 1] }

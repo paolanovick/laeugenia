@@ -10,7 +10,8 @@
     <meta name="keywords" content="mates artesanales, yerba mate, bombillas, comprar mates online, mates Argentina, tienda mate, envío mates, La Eugenia" />
     <meta name="author" content="La Eugenia & Flia." />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://laeugenia.vercel.app" />
+    <meta name="theme-color" content="#7B1F0F" />
+    <link rel="canonical" href="https://laeugenia.vercel.app/" />
 
     <!-- Open Graph (WhatsApp, Facebook, etc.) -->
     <meta property="fb:app_id" content="966242223397" />
@@ -21,6 +22,7 @@
     <meta property="og:image" content="https://laeugenia.vercel.app/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="La Eugenia & Flia. - Mates artesanales argentinos" />
     <meta property="og:locale" content="es_AR" />
     <meta property="og:site_name" content="La Eugenia & Flia." />
 
@@ -29,6 +31,7 @@
     <meta name="twitter:title" content="La Eugenia & Flia. | Mates Artesanales" />
     <meta name="twitter:description" content="Mates, yerbas y bombillas artesanales. Tradición argentina con envíos a todo el país." />
     <meta name="twitter:image" content="https://laeugenia.vercel.app/og.png" />
+    <meta name="twitter:image:alt" content="La Eugenia & Flia. - Mates artesanales argentinos" />
 
     <!-- Schema JSON-LD -->
     <script type="application/ld+json">
@@ -36,22 +39,38 @@
       "@context": "https://schema.org",
       "@type": "Store",
       "name": "La Eugenia & Flia.",
-      "url": "https://laeugenia.vercel.app",
-      "description": "Tienda de mates, yerbas y bombillas artesanales. Tradición argentina con envíos a todo el país.",
+      "url": "https://laeugenia.vercel.app/",
+      "logo": "https://laeugenia.vercel.app/logoSF.png",
+      "image": "https://laeugenia.vercel.app/og.png",
+      "description": "Tienda online de mates artesanales, yerbas, bombillas y accesorios materos. Calidad artesanal con envíos a todo el país.",
+      "priceRange": "$$",
+      "currenciesAccepted": "ARS",
+      "paymentAccepted": "Transferencia bancaria, Mercado Pago, efectivo",
       "address": {
         "@type": "PostalAddress",
         "addressCountry": "AR"
       },
-      "areaServed": "AR",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Argentina"
+      },
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
-        "name": "Mates, Yerbas y Bombillas Artesanales"
+        "name": "Mates, Yerbas y Bombillas Artesanales",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Mates artesanales" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Yerba mate y blends" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Bombillas de alpaca y acero" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Artículos materos" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Combos y regalos materos" } }
+        ]
       }
     }
     </script>
 
     <!-- Favicon -->
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.ico.png" />
+    <link rel="apple-touch-icon" href="/logoSF.png" />
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

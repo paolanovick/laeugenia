@@ -1,18 +1,23 @@
+import { useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { resolveImageUrl } from '../utils/image';
 import { useCart } from '../contexts/CartContext';
+import { useCartAnimation } from '../contexts/CartAnimationContext';
 import { usePageConfig } from '../contexts/PageConfigContext';
 import { useProducts } from '../contexts/ProductsContext';
-import { getCategories } from '../data/products';
+import { getCategories, type Product } from '../data/products';
 import { toast } from 'sonner';
 
 export const Cart = () => {
   const { cart, addToCart, updateQuantity, removeFromCart, clearCart, getCartTotal } =
     useCart();
+  const { flyToCart } = useCartAnimation();
   const { config } = usePageConfig();
   const { products } = useProducts();
+  const upsellImageRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const [addingProductId, setAddingProductId] = useState<string | null>(null);
 
   const handleRemoveItem = (productId: string, productName: string) => {
     removeFromCart(productId);
@@ -32,6 +37,27 @@ export const Cart = () => {
       `https://wa.me/${number}?text=${encodeURIComponent(message)}`,
       '_blank'
     );
+  };
+
+  const handleAddUpsellProduct = async (product: Product) => {
+    if (addingProductId) return;
+
+    setAddingProductId(product.id);
+    const productImage = resolveImageUrl(product.images[0]);
+
+    try {
+      await flyToCart({
+        imageSrc: productImage,
+        imageAlt: product.name,
+        sourceElement: upsellImageRefs.current[product.id],
+      });
+      addToCart(product);
+      toast.success(`${product.name} agregado al carrito`, {
+        icon: '🧉',
+      });
+    } finally {
+      setAddingProductId(null);
+    }
   };
 
   // Lógica de upsell: sugiere productos complementarios según lo que hay en el carrito
@@ -211,40 +237,49 @@ export const Cart = () => {
                   🧉 ¿Completá tu kit matero?
                 </p>
                 <div className="space-y-3">
-                  {upsellSuggestions.map((product) => (
-                    <div key={product.id} className="flex items-center gap-3">
-                      <div className="w-14 h-14 rounded-lg overflow-hidden bg-[#1a0a0a] flex-shrink-0">
-                        <img
-                          src={resolveImageUrl(product.images[0])}
-                          alt={product.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <Link to={`/product/${product.id}`}>
-                          <p className="text-white text-sm font-medium truncate hover:text-[#F5C080] transition-colors">
-                            {product.name}
+                  {upsellSuggestions.map((product) => {
+                    const productImage = resolveImageUrl(product.images[0]);
+
+                    return (
+                      <div key={product.id} className="flex items-center gap-3">
+                        <div
+                          ref={(node) => {
+                            if (node) {
+                              upsellImageRefs.current[product.id] = node;
+                            } else {
+                              delete upsellImageRefs.current[product.id];
+                            }
+                          }}
+                          className="w-14 h-14 rounded-lg overflow-hidden bg-[#1a0a0a] flex-shrink-0"
+                        >
+                          <img
+                            src={productImage}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <Link to={`/product/${product.id}`}>
+                            <p className="text-white text-sm font-medium truncate hover:text-[#F5C080] transition-colors">
+                              {product.name}
+                            </p>
+                          </Link>
+                          <p className="text-[#F5C080] text-sm font-bold">
+                            ${product.price.toLocaleString('es-AR')}
                           </p>
-                        </Link>
-                        <p className="text-[#F5C080] text-sm font-bold">
-                          ${product.price.toLocaleString('es-AR')}
-                        </p>
+                        </div>
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => void handleAddUpsellProduct(product)}
+                          disabled={addingProductId !== null}
+                          className="bg-[#F5C080] hover:bg-[#D07030] disabled:opacity-70 disabled:cursor-wait text-[#7B1F0F] px-3 py-2 rounded-lg text-sm font-semibold transition-colors flex-shrink-0"
+                        >
+                          + Agregar
+                        </motion.button>
                       </div>
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                          addToCart(product);
-                          toast.success(`${product.name} agregado al carrito`, {
-                            icon: '🧉',
-                          });
-                        }}
-                        className="bg-[#F5C080] hover:bg-[#D07030] text-[#7B1F0F] px-3 py-2 rounded-lg text-sm font-semibold transition-colors flex-shrink-0"
-                      >
-                        + Agregar
-                      </motion.button>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </motion.div>
             )}

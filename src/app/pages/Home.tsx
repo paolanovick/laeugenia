@@ -7,12 +7,19 @@ import { useProducts } from '../contexts/ProductsContext';
 import { getCategories } from '../data/products';
 import { useCategories } from '../contexts/CategoriesContext';
 import { usePageConfig } from '../contexts/PageConfigContext';
+import { useSEO } from '../hooks/useSEO';
 
 export const Home = () => {
   const { products } = useProducts();
   const { visibleCategories: categories } = useCategories();
   const { config } = usePageConfig();
   const featuredProducts = products.filter((p) => p.featured);
+
+  useSEO({
+    title: 'Mates, Yerbas y Bombillas Artesanales',
+    description: 'Tienda online de mates artesanales, yerbas, bombillas y accesorios materos. Calidad artesanal con envíos a todo el país. Comprá por WhatsApp.',
+    url: '/',
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#120505] via-[#7B1F0F] to-[#120505]">

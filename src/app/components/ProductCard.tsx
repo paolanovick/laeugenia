@@ -1,8 +1,10 @@
+import { useRef, useState, type MouseEvent } from 'react';
 import { motion } from 'motion/react';
 import { ShoppingCart, Eye } from 'lucide-react';
 import { Link } from 'react-router';
 import { Product, getCategories } from '../data/products';
 import { useCart } from '../contexts/CartContext';
+import { useCartAnimation } from '../contexts/CartAnimationContext';
 import { toast } from 'sonner';
 import { resolveImageUrl } from '../utils/image';
 import { usePageConfig } from '../contexts/PageConfigContext';
@@ -14,14 +16,31 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
   const { addToCart } = useCart();
+  const { flyToCart } = useCartAnimation();
   const { config } = usePageConfig();
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const productImage = resolveImageUrl(product.images[0]);
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    addToCart(product);
-    toast.success(`${product.name} agregado al carrito`, {
-      icon: '🧉',
-    });
+    e.stopPropagation();
+    if (isAdding) return;
+
+    setIsAdding(true);
+    try {
+      await flyToCart({
+        imageSrc: productImage,
+        imageAlt: product.name,
+        sourceElement: imageRef.current,
+      });
+      addToCart(product);
+      toast.success(`${product.name} agregado al carrito`, {
+        icon: '🧉',
+      });
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -40,7 +59,8 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
           {/* Image Container */}
           <div className="relative h-64 overflow-hidden bg-[#1a0a0a]">
             <motion.img
-              src={resolveImageUrl(product.images[0])}
+              ref={imageRef}
+              src={productImage}
               alt={product.name}
               className="w-full h-full object-contain p-3"
               whileHover={{ scale: 1.05 }}
@@ -67,7 +87,8 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={handleAddToCart}
-                className="relative flex-1 overflow-hidden border border-[#c8945a] text-[#c8945a] px-4 py-2 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 shadow-lg group/btn"
+                disabled={isAdding}
+                className="relative flex-1 overflow-hidden border border-[#c8945a] text-[#c8945a] px-4 py-2 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 shadow-lg group/btn disabled:cursor-wait disabled:opacity-80"
               >
                 <span className="absolute inset-0 bg-[#c8945a] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                 <ShoppingCart className="w-4 h-4 relative z-10 group-hover/btn:text-[#0e0b08] transition-colors duration-300" />

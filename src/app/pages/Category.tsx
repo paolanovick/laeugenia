@@ -7,6 +7,7 @@ import { useProducts } from '../contexts/ProductsContext';
 import { usePageConfig } from '../contexts/PageConfigContext';
 import { getCategories } from '../data/products';
 import { ProductCard } from '../components/ProductCard';
+import { useSEO } from '../hooks/useSEO';
 
 type SortKey = 'default' | 'price-asc' | 'price-desc' | 'name-asc';
 
@@ -18,6 +19,14 @@ export const Category = () => {
   const { config } = usePageConfig();
   const [sort, setSort] = useState<SortKey>('default');
   const category = categories.find((c) => c.id === categoryId);
+
+  useSEO({
+    title: category?.name ?? 'Categoría',
+    description: category?.description
+      ? `${category.description} — Comprá en La Eugenia & Flia. con envío a todo el país.`
+      : `${category?.name ?? 'Productos'} artesanales en La Eugenia & Flia. Envíos a todo el país.`,
+    url: categoryId ? `/category/${categoryId}` : undefined,
+  });
 
   const rawProducts = products.filter((p) => getCategories(p).includes(categoryId!));
   const categoryProducts = [...rawProducts].sort((a, b) => {

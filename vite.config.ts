@@ -8,7 +8,18 @@ import type { ServerResponse } from 'http'
 
 const require = createRequire(import.meta.url)
 
-type Handler = (req: Connect.IncomingMessage & { body?: unknown; query?: Record<string, string> }, res: ServerResponse) => Promise<void>
+type LocalRequest = Connect.IncomingMessage & {
+  body?: unknown
+  query?: Record<string, string>
+}
+
+type LocalResponse = ServerResponse & {
+  status: (code: number) => LocalResponse
+  json: (data: unknown) => void
+  send: (data?: unknown) => void
+}
+
+type Handler = (req: LocalRequest, res: LocalResponse) => Promise<void>
 
 function parseBody(req: Connect.IncomingMessage): Promise<unknown> {
   return new Promise((resolve) => {
@@ -18,6 +29,38 @@ function parseBody(req: Connect.IncomingMessage): Promise<unknown> {
       try { resolve(raw ? JSON.parse(raw) : undefined) } catch { resolve(undefined) }
     })
   })
+}
+
+function adaptResponse(res: ServerResponse): LocalResponse {
+  const localRes = res as LocalResponse
+
+  localRes.status = (code: number) => {
+    localRes.statusCode = code
+    return localRes
+  }
+
+  localRes.json = (data: unknown) => {
+    if (!localRes.headersSent) {
+      localRes.setHeader('Content-Type', 'application/json')
+    }
+    localRes.end(JSON.stringify(data))
+  }
+
+  localRes.send = (data?: unknown) => {
+    if (data === undefined) {
+      localRes.end()
+      return
+    }
+
+    if (typeof data === 'object') {
+      localRes.json(data)
+      return
+    }
+
+    localRes.end(String(data))
+  }
+
+  return localRes
 }
 
 export default defineConfig(({ mode }) => {
@@ -70,7 +113,7 @@ export default defineConfig(({ mode }) => {
 
             if (handler) {
               try {
-                await handler(req as any, res)
+                await handler(req as LocalRequest, adaptResponse(res))
               } catch (e: any) {
                 res.writeHead(500, { 'Content-Type': 'application/json' })
                 res.end(JSON.stringify({ error: e.message }))

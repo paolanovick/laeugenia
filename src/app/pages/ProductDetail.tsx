@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { getCategories } from '../data/products';
 import { useParams, Link } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
@@ -14,10 +14,12 @@ import {
 } from 'lucide-react';
 import { resolveImageUrl } from '../utils/image';
 import { useCart } from '../contexts/CartContext';
+import { useCartAnimation } from '../contexts/CartAnimationContext';
 import { useProducts } from '../contexts/ProductsContext';
 import { usePageConfig } from '../contexts/PageConfigContext';
 import { toast } from 'sonner';
 import { ProductCard } from '../components/ProductCard';
+import { useSEO } from '../hooks/useSEO';
 
 export const ProductDetail = () => {
   const { id } = useParams();
@@ -25,8 +27,22 @@ export const ProductDetail = () => {
   const { config } = usePageConfig();
   const product = products.find((p) => p.id === id);
   const { addToCart, updateQuantity: updateCartQuantity, cart } = useCart();
+  const { flyToCart } = useCartAnimation();
 
   const [selectedImage, setSelectedImage] = useState(0);
+  const [isAdding, setIsAdding] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  useSEO({
+    title: product?.name ?? 'Producto',
+    description: product?.description
+      ? `${product.description} — Comprá en La Eugenia & Flia. con envío a todo el país.`
+      : undefined,
+    image: product?.images?.[0] ? resolveImageUrl(product.images[0]) : undefined,
+    url: product ? `/product/${product.id}` : undefined,
+    type: 'product',
+    price: product?.price,
+  });
 
   // Quantity is derived from cart so the navbar updates in real time
   const cartItem = cart.find((item) => item.id === id);
@@ -53,12 +69,31 @@ export const ProductDetail = () => {
   const relatedProducts = products
     .filter((p) => p.id !== product.id && getCategories(p).some((c) => productCats.includes(c)))
     .slice(0, 4);
+  const selectedImageSrc = resolveImageUrl(product.images[selectedImage]);
+
+  const addProductToCart = async (showToast = true) => {
+    if (isAdding) return;
+
+    setIsAdding(true);
+    try {
+      await flyToCart({
+        imageSrc: selectedImageSrc,
+        imageAlt: product.name,
+        sourceElement: imageRef.current,
+      });
+      addToCart(product);
+      if (showToast) {
+        toast.success(`${product.name} agregado al carrito`, {
+          icon: '🧉',
+        });
+      }
+    } finally {
+      setIsAdding(false);
+    }
+  };
 
   const handleAddToCart = () => {
-    addToCart(product);
-    toast.success(`${product.name} agregado al carrito`, {
-      icon: '🧉',
-    });
+    void addProductToCart(true);
   };
 
   const handleBuyWhatsApp = () => {
@@ -109,8 +144,9 @@ export const ProductDetail = () => {
             <div className="relative bg-[#1a0a0a] rounded-2xl overflow-hidden border border-white/20 aspect-square">
               <AnimatePresence mode="wait">
                 <motion.img
+                  ref={imageRef}
                   key={selectedImage}
-                  src={resolveImageUrl(product.images[selectedImage])}
+                  src={selectedImageSrc}
                   alt={product.name}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -237,8 +273,9 @@ export const ProductDetail = () => {
                     {quantity}
                   </span>
                   <button
-                    onClick={() => addToCart(product)}
-                    className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-lg border border-white/20 transition-colors"
+                    onClick={() => void addProductToCart(false)}
+                    disabled={isAdding}
+                    className="w-12 h-12 bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-wait text-white rounded-lg border border-white/20 transition-colors"
                   >
                     +
                   </button>
@@ -251,7 +288,8 @@ export const ProductDetail = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleAddToCart}
-                  className="w-full bg-[#F5C080] hover:bg-[#D07030] text-[#7B1F0F] px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-xl transition-colors"
+                  disabled={isAdding}
+                  className="w-full bg-[#F5C080] hover:bg-[#D07030] disabled:opacity-80 disabled:cursor-wait text-[#7B1F0F] px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-xl transition-colors"
                 >
                   <ShoppingCart className="w-6 h-6" />
                   Agregar al Carrito

@@ -4,6 +4,7 @@ import { ProductsProvider } from './contexts/ProductsContext';
 import { EntryProvider } from './contexts/EntryContext';
 import { PageConfigProvider } from './contexts/PageConfigContext';
 import { CategoriesProvider } from './contexts/CategoriesContext';
+import { CartAnimationProvider } from './contexts/CartAnimationContext';
 import { router } from './routes';
 
 export default function App() {
@@ -13,7 +14,9 @@ export default function App() {
         <CategoriesProvider>
           <ProductsProvider>
             <CartProvider>
-              <RouterProvider router={router} />
+              <CartAnimationProvider>
+                <RouterProvider router={router} />
+              </CartAnimationProvider>
             </CartProvider>
           </ProductsProvider>
         </CategoriesProvider>
