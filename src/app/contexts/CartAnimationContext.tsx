@@ -32,6 +32,11 @@ type FlyToCartOptions = {
   fallbackRect?: DOMRect | null;
 };
 
+type SourceSelection = {
+  rect: DOMRect;
+  compact: boolean;
+};
+
 type CartAnimationContextType = {
   registerCartTarget: (node: HTMLElement | null) => void;
   flyToCart: (options: FlyToCartOptions) => Promise<void>;
@@ -48,6 +53,8 @@ const getReducedMotion = () =>
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
+const isSmallViewport = () => window.innerWidth < 640;
+
 const isRectVisible = (rect?: DOMRect | null) =>
   !!rect &&
   rect.width > 0 &&
@@ -57,19 +64,43 @@ const isRectVisible = (rect?: DOMRect | null) =>
   rect.top < window.innerHeight &&
   rect.left < window.innerWidth;
 
-const getSourceRect = (options: FlyToCartOptions) => {
+const getSourceSelection = (options: FlyToCartOptions): SourceSelection | null => {
   const primaryRect =
     options.sourceRect ?? options.sourceElement?.getBoundingClientRect();
   const fallbackRect =
     options.fallbackRect ?? options.fallbackElement?.getBoundingClientRect();
+  const primaryVisible = isRectVisible(primaryRect);
+  const fallbackVisible = isRectVisible(fallbackRect);
 
-  if (isRectVisible(primaryRect)) return primaryRect;
-  if (isRectVisible(fallbackRect)) return fallbackRect;
-  return primaryRect ?? fallbackRect;
+  if (fallbackRect && fallbackVisible && (!primaryVisible || isSmallViewport())) {
+    return { rect: fallbackRect, compact: true };
+  }
+
+  if (primaryRect && primaryVisible) return { rect: primaryRect, compact: false };
+  if (fallbackRect) return { rect: fallbackRect, compact: true };
+  if (primaryRect) return { rect: primaryRect, compact: false };
+
+  return null;
 };
 
-const normalizeSourceRect = (rect: DOMRect): FlightRect | null => {
+const normalizeSourceRect = (
+  rect: DOMRect,
+  compact = false
+): FlightRect | null => {
   if (rect.width <= 0 || rect.height <= 0) return null;
+
+  if (compact) {
+    const size = clamp(Math.max(rect.height * 1.45, 78), 72, 104);
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    return {
+      left: clamp(centerX - size / 2, 12, window.innerWidth - size - 12),
+      top: clamp(centerY - size / 2, 12, window.innerHeight - size - 12),
+      width: size,
+      height: size,
+    };
+  }
 
   const maxSize = 180;
   const scale = Math.min(1, maxSize / Math.max(rect.width, rect.height));
@@ -130,14 +161,14 @@ export const CartAnimationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const flyToCart = useCallback(
     (options: FlyToCartOptions) => {
-      const sourceRect = getSourceRect(options);
+      const source = getSourceSelection(options);
       const targetRect = cartTargetRef.current?.getBoundingClientRect();
 
-      if (!sourceRect || !targetRect || getReducedMotion()) {
+      if (!source || !targetRect) {
         return Promise.resolve();
       }
 
-      const from = normalizeSourceRect(sourceRect);
+      const from = normalizeSourceRect(source.rect, source.compact);
       if (!from) return Promise.resolve();
 
       const id = nextFlightId.current++;
@@ -173,6 +204,7 @@ export const CartAnimationProvider: React.FC<{ children: React.ReactNode }> = ({
           {flights.map((flight) => {
             const midLeft = (flight.from.left + flight.to.left) / 2;
             const arcTop = getFlightArcTop(flight.from, flight.to);
+            const reducedMotion = getReducedMotion();
 
             return (
               <motion.div
@@ -204,7 +236,7 @@ export const CartAnimationProvider: React.FC<{ children: React.ReactNode }> = ({
                   rotateY: [0, -18, 0],
                 }}
                 transition={{
-                  duration: 0.78,
+                  duration: reducedMotion ? 0.42 : 0.78,
                   ease: [0.22, 1, 0.36, 1],
                   times: [0, 0.55, 1],
                 }}
