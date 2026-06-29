@@ -90,7 +90,7 @@ const normalizeSourceRect = (
   if (rect.width <= 0 || rect.height <= 0) return null;
 
   if (compact) {
-    const size = clamp(Math.max(rect.height * 1.45, 78), 72, 104);
+    const size = clamp(Math.max(rect.height * 1.75, 96), 88, 126);
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
@@ -102,7 +102,7 @@ const normalizeSourceRect = (
     };
   }
 
-  const maxSize = 180;
+  const maxSize = 220;
   const scale = Math.min(1, maxSize / Math.max(rect.width, rect.height));
   const width = Math.max(46, rect.width * scale);
   const height = Math.max(46, rect.height * scale);
@@ -223,14 +223,18 @@ export const CartAnimationProvider: React.FC<{ children: React.ReactNode }> = ({
                 animate={{
                   left: [flight.from.left, midLeft, flight.to.left],
                   top: [flight.from.top, arcTop, flight.to.top],
-                  width: [flight.from.width, flight.from.width * 0.7, flight.to.width],
+                  width: [
+                    flight.from.width,
+                    flight.from.width * 1.08,
+                    flight.to.width,
+                  ],
                   height: [
                     flight.from.height,
-                    flight.from.height * 0.7,
+                    flight.from.height * 1.08,
                     flight.to.height,
                   ],
-                  opacity: [1, 1, 0.92, 0],
-                  scale: [1, 1.12, 0.32],
+                  opacity: [1, 1, 0.95, 0],
+                  scale: [1, 1.08, 0.32],
                   rotate: [0, -8, 12, 0],
                   rotateX: [0, 16, 0],
                   rotateY: [0, -18, 0],
