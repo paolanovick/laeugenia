@@ -27,7 +27,9 @@ type FlyToCartOptions = {
   imageSrc: string;
   imageAlt?: string;
   sourceElement?: HTMLElement | null;
+  fallbackElement?: HTMLElement | null;
   sourceRect?: DOMRect | null;
+  fallbackRect?: DOMRect | null;
 };
 
 type CartAnimationContextType = {
@@ -46,6 +48,26 @@ const getReducedMotion = () =>
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
+const isRectVisible = (rect?: DOMRect | null) =>
+  !!rect &&
+  rect.width > 0 &&
+  rect.height > 0 &&
+  rect.bottom > 0 &&
+  rect.right > 0 &&
+  rect.top < window.innerHeight &&
+  rect.left < window.innerWidth;
+
+const getSourceRect = (options: FlyToCartOptions) => {
+  const primaryRect =
+    options.sourceRect ?? options.sourceElement?.getBoundingClientRect();
+  const fallbackRect =
+    options.fallbackRect ?? options.fallbackElement?.getBoundingClientRect();
+
+  if (isRectVisible(primaryRect)) return primaryRect;
+  if (isRectVisible(fallbackRect)) return fallbackRect;
+  return primaryRect ?? fallbackRect;
+};
+
 const normalizeSourceRect = (rect: DOMRect): FlightRect | null => {
   if (rect.width <= 0 || rect.height <= 0) return null;
 
@@ -55,10 +77,12 @@ const normalizeSourceRect = (rect: DOMRect): FlightRect | null => {
   const height = Math.max(46, rect.height * scale);
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
+  const left = centerX - width / 2;
+  const top = centerY - height / 2;
 
   return {
-    left: centerX - width / 2,
-    top: centerY - height / 2,
+    left: clamp(left, 12, window.innerWidth - width - 12),
+    top: clamp(top, 12, window.innerHeight - height - 12),
     width,
     height,
   };
@@ -106,8 +130,7 @@ export const CartAnimationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const flyToCart = useCallback(
     (options: FlyToCartOptions) => {
-      const sourceRect =
-        options.sourceRect ?? options.sourceElement?.getBoundingClientRect();
+      const sourceRect = getSourceRect(options);
       const targetRect = cartTargetRef.current?.getBoundingClientRect();
 
       if (!sourceRect || !targetRect || getReducedMotion()) {

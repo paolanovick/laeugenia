@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type MouseEvent } from 'react';
 import { getCategories } from '../data/products';
 import { useParams, Link } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
@@ -71,7 +71,10 @@ export const ProductDetail = () => {
     .slice(0, 4);
   const selectedImageSrc = resolveImageUrl(product.images[selectedImage]);
 
-  const addProductToCart = async (showToast = true) => {
+  const addProductToCart = async (
+    showToast = true,
+    fallbackElement?: HTMLElement | null
+  ) => {
     if (isAdding) return;
 
     setIsAdding(true);
@@ -80,6 +83,7 @@ export const ProductDetail = () => {
         imageSrc: selectedImageSrc,
         imageAlt: product.name,
         sourceElement: imageRef.current,
+        fallbackElement,
       });
       addToCart(product);
       if (showToast) {
@@ -92,8 +96,8 @@ export const ProductDetail = () => {
     }
   };
 
-  const handleAddToCart = () => {
-    void addProductToCart(true);
+  const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
+    void addProductToCart(true, e.currentTarget);
   };
 
   const handleBuyWhatsApp = () => {
@@ -273,7 +277,7 @@ export const ProductDetail = () => {
                     {quantity}
                   </span>
                   <button
-                    onClick={() => void addProductToCart(false)}
+                    onClick={(e) => void addProductToCart(false, e.currentTarget)}
                     disabled={isAdding}
                     className="w-12 h-12 bg-white/10 hover:bg-white/20 disabled:opacity-50 disabled:cursor-wait text-white rounded-lg border border-white/20 transition-colors"
                   >

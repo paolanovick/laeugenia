@@ -33,6 +33,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
         imageSrc: productImage,
         imageAlt: product.name,
         sourceElement: imageRef.current,
+        fallbackElement: e.currentTarget,
       });
       addToCart(product);
       toast.success(`${product.name} agregado al carrito`, {
@@ -83,7 +84,7 @@ export const ProductCard = ({ product, index = 0 }: ProductCardProps) => {
             )}
 
             {/* Quick Actions */}
-            <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300">
               <motion.button
                 whileTap={{ scale: 0.97 }}
                 onClick={handleAddToCart}

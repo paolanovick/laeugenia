@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type MouseEvent } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft } from 'lucide-react';
@@ -39,7 +39,10 @@ export const Cart = () => {
     );
   };
 
-  const handleAddUpsellProduct = async (product: Product) => {
+  const handleAddUpsellProduct = async (
+    product: Product,
+    fallbackElement?: HTMLElement | null
+  ) => {
     if (addingProductId) return;
 
     setAddingProductId(product.id);
@@ -50,6 +53,7 @@ export const Cart = () => {
         imageSrc: productImage,
         imageAlt: product.name,
         sourceElement: upsellImageRefs.current[product.id],
+        fallbackElement,
       });
       addToCart(product);
       toast.success(`${product.name} agregado al carrito`, {
@@ -271,7 +275,9 @@ export const Cart = () => {
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => void handleAddUpsellProduct(product)}
+                          onClick={(e: MouseEvent<HTMLButtonElement>) =>
+                            void handleAddUpsellProduct(product, e.currentTarget)
+                          }
                           disabled={addingProductId !== null}
                           className="bg-[#F5C080] hover:bg-[#D07030] disabled:opacity-70 disabled:cursor-wait text-[#7B1F0F] px-3 py-2 rounded-lg text-sm font-semibold transition-colors flex-shrink-0"
                         >
